@@ -14,11 +14,11 @@ public interface VendingMachine {
     //user selects an item that they want from the list of available products
     void selectProduct(String code);
 
-    //needs to change to enterBills
-    void displayEnterCoinsMessage();
+    //message display to enter money
+    void displayEnterBillsMessage();
 
     //should change to enter bills
-    void enterCoins(int... coins);
+    void enterBills();
 
     void displayChangeMessage();
 }

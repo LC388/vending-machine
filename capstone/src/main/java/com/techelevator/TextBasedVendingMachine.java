@@ -16,7 +16,7 @@ public class TextBasedVendingMachine implements VendingMachine{
     private int selectedProduct; //for the selectProduct() method
     private CoinBundle change; //from enterCoins() method
     private Inventory inventory;
-
+    private double customerBalance = 0.0;
 
     @Override
     public void mainMenu() {
@@ -79,7 +79,7 @@ public class TextBasedVendingMachine implements VendingMachine{
         System.out.println("1) Feed Money into machine");
         System.out.println("2) Select a product");
         System.out.println("3) Finish Transaction");
-        System.out.println("Current money added: TODO add balance");
+        System.out.println("Current money added: " + customerBalance);
         System.out.println("");
         System.out.println("Please enter your selection: ");
 
@@ -89,7 +89,7 @@ public class TextBasedVendingMachine implements VendingMachine{
 //        int purchaseMenuInput = Integer.parseInt(purchaseMenuScanner.nextLine());
 
         if(purchaseMenuScannerStringInput.equals("1")){
-            System.out.println("TODO feed money");
+            displayEnterBillsMessage();
         } else if(purchaseMenuScannerStringInput.equals("2")){
             System.out.println("TODO select a product");
         } else if(purchaseMenuScannerStringInput.equals("3")){
@@ -107,24 +107,45 @@ public class TextBasedVendingMachine implements VendingMachine{
     @Override
     public void selectProduct(String code) {
         //user selects an item that they want from the list of available products
-
-
     }
 
     @Override
-    public void displayEnterCoinsMessage() {
+    public void displayEnterBillsMessage() {
         //asks user to enter coins (need to change to bills)
-        System.out.println("Please enter the coins as follows: ");
-        System.out.println("Number of 5 cent coins, number of 10 cent coins, number of 25 cent coins");
-        System.out.println("");
-        System.out.println("Example: if you would like to enter 2 dimes, 0, 2, 0");
-        System.out.println("Please enter coins");
-
+        System.out.println("Please enter amount: (1) $1; (2) $5; (3) $10; (4) $20; (5) $50; (6) $100; (7) stop entering money");
+        System.out.println("Current money added: " + customerBalance);
+        enterBills();
     }
 
     @Override
-    public void enterCoins(int... coins) {
-        //receives the coins entered by the user, calculate total amount inserted and figure out change
+    public void enterBills() {
+        //receives the bills entered by the user, calculate total amount inserted and figure out change
+
+        //scanner to get input
+        Scanner billsEnteredScanner = new Scanner(System.in);
+        int billsEnteredInput = billsEnteredScanner.nextInt();
+
+        if(billsEnteredInput == 1){
+            customerBalance += 1.0;
+            displayEnterBillsMessage();
+        } else if(billsEnteredInput == 2){
+            customerBalance += 5.0;
+            displayEnterBillsMessage();
+        }else if(billsEnteredInput == 3){
+            customerBalance += 10.0;
+            displayEnterBillsMessage();
+        }else if(billsEnteredInput == 4){
+            customerBalance += 20.0;
+            displayEnterBillsMessage();
+        } else if(billsEnteredInput == 5){
+            customerBalance += 50.0;
+            displayEnterBillsMessage();
+        }else if(billsEnteredInput == 6){
+            customerBalance += 100.0;
+            displayEnterBillsMessage();
+        } else if(billsEnteredInput == 7){
+            purchaseMenu();
+        }
 
         //create SimpleCalculator object which implements Calculator interface
         Calculator calculator = new SimpleCalculator();
@@ -133,7 +154,7 @@ public class TextBasedVendingMachine implements VendingMachine{
 //        Product product = Product.valueOf(this.selectedProduct);
 
         //gets price
-        int total = calculator.calculateTotal(new CoinBundle(coins));
+//        int total = calculator.calculateTotal(new CoinBundle(coins));
 
         //total amount - price
 //        int changeAmount = total - product.getPrice();
@@ -153,4 +174,10 @@ public class TextBasedVendingMachine implements VendingMachine{
         System.out.println("   5  cent coins: "+ change.number5CentCoins);
 
     }
+
+    //getters and setters
+    public double getCustomerBalance() {
+        return customerBalance;
+    }
+
 }
