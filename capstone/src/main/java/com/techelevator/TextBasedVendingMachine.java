@@ -26,25 +26,28 @@ public class TextBasedVendingMachine implements VendingMachine{
         VendingMachine vendingMachine= new TextBasedVendingMachine();
 
         //ask customer to choose products
-
-        System.out.println("Please press (1) to Display vending machine items, (2) to make a purchase, (3) to exit:");
+        System.out.println("");
+        System.out.println("1) Display vending machine items");
+        System.out.println("2) Make a purchase");
+        System.out.println("3) Exit");
+        System.out.println("Please enter a number: ");
         Scanner selectProductScanner = new Scanner(System.in);
-        int productSelection = Integer.parseInt(selectProductScanner.nextLine());
+        String productSelection = selectProductScanner.nextLine();
 
         //if 1, display products from TextBasedVendingMachine class
         //if 2, go to purchase menu
         //if 3, end program
         //if 4, hidden menu
-        if(productSelection == 1){
+        if(productSelection.equals("1")){
            displayProducts();  //invokes the displayProducts method below
             mainMenu(); //go back to this method
-        } else if(productSelection == 2){
-            System.out.println("TODO: go to purchase menu");
+        } else if(productSelection.equals("2")){
+            purchaseMenu();
 
-        } else if(productSelection == 3){
+        } else if(productSelection.equals("3")){
             System.out.println("TODO: end program");
 
-        }else if(productSelection == 4){
+        }else if(productSelection.equals("4")){
             System.out.println("TODO: hidden menu items go here");
         }else {
             System.out.println("Please enter a valid number");
@@ -61,21 +64,49 @@ public class TextBasedVendingMachine implements VendingMachine{
         this.inventory = new Inventory();
         List<VendingItem> listOfItems = inventory.getVendingItems();
         for (int i = 0; i < listOfItems.size(); i++) {
-            System.out.print(listOfItems.get(i).getCode() + "| ");
-            System.out.print(listOfItems.get(i).getName() + "| ");
-            System.out.print(listOfItems.get(i).getPrice() + "| ");
-            System.out.println(listOfItems.get(i).getQuantity());
+            System.out.print(listOfItems.get(i).getCode() + " | ");
+            System.out.print(listOfItems.get(i).getName() + " | ");
+            System.out.print("$" + listOfItems.get(i).getPrice() + " | ");
+            System.out.println("Qty: " + listOfItems.get(i).getQuantity());
         }
 
+    }
 
-//        for(Product product: Product.values()){
-//            System.out.println("    " + product.getId()+ " " + product.name()+" - Price: " + product.getPrice());
-//        }
+    @Override
+    public void purchaseMenu() {
+        //displays the purchase menu (feed money, select product, finish transaction, current money)
+        System.out.println("");
+        System.out.println("1) Feed Money into machine");
+        System.out.println("2) Select a product");
+        System.out.println("3) Finish Transaction");
+        System.out.println("Current money added: TODO add balance");
+        System.out.println("");
+        System.out.println("Please enter your selection: ");
+
+        //collect user input, assign to int variable
+        Scanner purchaseMenuScanner = new Scanner(System.in);
+        String purchaseMenuScannerStringInput = purchaseMenuScanner.nextLine();
+//        int purchaseMenuInput = Integer.parseInt(purchaseMenuScanner.nextLine());
+
+        if(purchaseMenuScannerStringInput.equals("1")){
+            System.out.println("TODO feed money");
+        } else if(purchaseMenuScannerStringInput.equals("2")){
+            System.out.println("TODO select a product");
+        } else if(purchaseMenuScannerStringInput.equals("3")){
+            System.out.println("TODO finish transaction");
+        } else if(purchaseMenuScannerStringInput.equals("4")){
+            System.out.println("TODO hidden menu");
+        } else {
+            //.err makes it print red
+            System.err.println("please enter a valid number");
+            purchaseMenu();
+        }
 
     }
 
     @Override
     public void selectProduct(String code) {
+        //user selects an item that they want from the list of available products
 
 
     }
