@@ -21,16 +21,20 @@ public class Inventory {
         File newFile = new File("vendingmachine.csv");
         Scanner fileScanner;
         try {
+            //this reads from vendingmachine.csv
             fileScanner = new Scanner(newFile);
             while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                String [] splittedLine = line.split("\\|");
-                String code = splittedLine[0];
-                String name = splittedLine[1];
-                String price = splittedLine[2];
-                String type = splittedLine[3];
+                String line = fileScanner.nextLine(); //reads everything in as a string
+                String [] individualItems = line.split("\\|"); //split up that string
+                String code = individualItems[0];
+                String name = individualItems[1];
+                String price = individualItems[2];
+                String type = individualItems[3];
+
+                //we always start at 5
                 String quantity = "5";
 
+                //make a new object out of each item based on their type
                 if(type.equals("Chip")) {
                     vendingItems.add(new Chips(code, name, price, type, quantity));
                 } else if (type.equals("Candy")) {
@@ -45,7 +49,7 @@ public class Inventory {
 
 
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            System.out.println("Inventory file not found");
         }
     }
 

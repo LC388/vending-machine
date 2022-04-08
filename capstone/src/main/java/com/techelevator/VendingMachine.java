@@ -2,6 +2,8 @@ package com.techelevator;
 
 public interface VendingMachine {
 
+    void mainMenu();
+
     void displayProducts();
 
     void selectProduct(String code);

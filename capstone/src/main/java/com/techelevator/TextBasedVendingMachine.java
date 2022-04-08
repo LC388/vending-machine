@@ -15,10 +15,41 @@ public class TextBasedVendingMachine implements VendingMachine{
 
     private int selectedProduct; //for the selectProduct() method
     private CoinBundle change; //from enterCoins() method
-
     private Inventory inventory;
 
 
+    @Override
+    public void mainMenu() {
+        //this method displays the main menu and asks them to make a choice 1-3 or hidden menu
+
+        //instantiate a new TextBasedVendingMachine (which implements the VendingMachine interface)
+        VendingMachine vendingMachine= new TextBasedVendingMachine();
+
+        //ask customer to choose products
+
+        System.out.println("Please press (1) to Display vending machine items, (2) to make a purchase, (3) to exit:");
+        Scanner selectProductScanner = new Scanner(System.in);
+        int productSelection = Integer.parseInt(selectProductScanner.nextLine());
+
+        //if 1, display products from TextBasedVendingMachine class
+        //if 2, go to purchase menu
+        //if 3, end program
+        //if 4, hidden menu
+        if(productSelection == 1){
+           displayProducts();  //invokes the displayProducts method below
+            mainMenu(); //go back to this method
+        } else if(productSelection == 2){
+            System.out.println("TODO: go to purchase menu");
+
+        } else if(productSelection == 3){
+            System.out.println("TODO: end program");
+
+        }else if(productSelection == 4){
+            System.out.println("TODO: hidden menu items go here");
+        }else {
+            System.out.println("Please enter a valid number");
+        }
+    }
 
     @Override
     public void displayProducts() {
@@ -32,7 +63,8 @@ public class TextBasedVendingMachine implements VendingMachine{
         for (int i = 0; i < listOfItems.size(); i++) {
             System.out.print(listOfItems.get(i).getCode() + "| ");
             System.out.print(listOfItems.get(i).getName() + "| ");
-            System.out.println(listOfItems.get(i).getPrice());
+            System.out.print(listOfItems.get(i).getPrice() + "| ");
+            System.out.println(listOfItems.get(i).getQuantity());
         }
 
 
@@ -40,11 +72,6 @@ public class TextBasedVendingMachine implements VendingMachine{
 //            System.out.println("    " + product.getId()+ " " + product.name()+" - Price: " + product.getPrice());
 //        }
 
-
-
-        //ask the user to select the product
-        System.out.println("  ");
-        System.out.println("  Please select your product: ");
     }
 
     @Override
