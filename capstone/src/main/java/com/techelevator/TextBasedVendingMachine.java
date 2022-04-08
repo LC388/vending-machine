@@ -1,20 +1,46 @@
 package com.techelevator;
+import com.techelevator.Product;
+import com.techelevator.Candy;
+import com.techelevator.Chips;
+import com.techelevator.Drink;
+import com.techelevator.Gum;
+import com.techelevator.VendingItem;
+import com.techelevator.Inventory;
+
+import java.awt.*;
+import java.util.List;
+import java.util.Scanner;
 
 public class TextBasedVendingMachine implements VendingMachine{
 
     private int selectedProduct; //for the selectProduct() method
     private CoinBundle change; //from enterCoins() method
 
+    private Inventory inventory;
+
+
+
     @Override
     public void displayProducts() {
+
         //displays welcome message and choices
-        System.out.println("Welcome to the vending machine");
         System.out.println("Products available");
 
-        //gets values from the enum in the Product class (need to change)
-        for(Product product: Product.values()){
-            System.out.println("    " + product.getId()+ " " + product.name()+" - Price: " + product.getPrice());
+        //gets values from the getInventoryItems in the Product class
+        this.inventory = new Inventory();
+        List<VendingItem> listOfItems = inventory.getVendingItems();
+        for (int i = 0; i < listOfItems.size(); i++) {
+            System.out.print(listOfItems.get(i).getCode() + "| ");
+            System.out.print(listOfItems.get(i).getName() + "| ");
+            System.out.println(listOfItems.get(i).getPrice());
         }
+
+
+//        for(Product product: Product.values()){
+//            System.out.println("    " + product.getId()+ " " + product.name()+" - Price: " + product.getPrice());
+//        }
+
+
 
         //ask the user to select the product
         System.out.println("  ");
@@ -22,9 +48,8 @@ public class TextBasedVendingMachine implements VendingMachine{
     }
 
     @Override
-    public void selectProduct(int product) {
-        //saves the product selected by the user in a variable
-        selectedProduct = product;
+    public void selectProduct(String code) {
+
 
     }
 
@@ -47,14 +72,14 @@ public class TextBasedVendingMachine implements VendingMachine{
         Calculator calculator = new SimpleCalculator();
 
         //gets this from Product class
-        Product product = Product.valueOf(this.selectedProduct);
+//        Product product = Product.valueOf(this.selectedProduct);
 
         //gets price
         int total = calculator.calculateTotal(new CoinBundle(coins));
 
         //total amount - price
-        int changeAmount = total - product.getPrice();
-        change = calculator.calculateChange(changeAmount);
+//        int changeAmount = total - product.getPrice();
+//        change = calculator.calculateChange(changeAmount);
 
 
     }

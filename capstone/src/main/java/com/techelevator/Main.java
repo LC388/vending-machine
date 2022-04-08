@@ -9,6 +9,32 @@ public class Main {
         //instantiate a new TextBasedVendingMachine (which implements the VendingMachine interface)
         VendingMachine vendingMachine= new TextBasedVendingMachine();
 
+        //welcome message
+        System.out.println("******************************");
+        System.out.println("Welcome to the Vending Machine");
+        System.out.println("******************************");
+        System.out.println();
+
+        //ask customer to choose products
+        System.out.println("Please press (1) to Display vending machine items, (2) to make a purchase, (3) to exit:");
+        Scanner selectProductScanner = new Scanner(System.in);
+        int productSelection = Integer.parseInt(selectProductScanner.nextLine());
+        //if 1, display products from TextBasedVendingMachine class
+        //if 2, go to purchase menu
+        //if 3, end program
+        if(productSelection == 1){
+            vendingMachine.displayProducts();
+        } else if(productSelection == 2){
+
+        } else if(productSelection == 3){
+
+        }else {
+            System.out.println("Please enter a number");
+        }
+
+
+
+
         //invokes the displayProducts method from TextBasedVendingMachine class
         vendingMachine.displayProducts();
 
@@ -18,7 +44,7 @@ public class Main {
         int selectProductNumber = Integer.parseInt(selectedProduct);
 
         //product entered by the user
-        vendingMachine.selectProduct(selectProductNumber);
+//        vendingMachine.selectProduct(selectProductNumber);
 
         //request coins - need to change this to bills
         //calls method from TextBasedVendingMachine class

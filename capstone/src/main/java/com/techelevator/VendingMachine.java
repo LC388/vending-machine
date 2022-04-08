@@ -4,7 +4,7 @@ public interface VendingMachine {
 
     void displayProducts();
 
-    void selectProduct(int product);
+    void selectProduct(String code);
 
     //needs to change to enterBills
     void displayEnterCoinsMessage();
