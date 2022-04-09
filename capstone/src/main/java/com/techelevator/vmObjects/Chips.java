@@ -1,4 +1,6 @@
-package com.techelevator;
+package com.techelevator.vmObjects;
+
+import com.techelevator.VendingItem;
 
 public class Chips extends VendingItem {
 

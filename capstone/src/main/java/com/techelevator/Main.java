@@ -18,32 +18,7 @@ public class Main {
 
 
 
-//        //ask the user to select the product
-//        System.out.println("  ");
-//        System.out.println("  Please select your product: ");
-//
-//        //read product number selected by user
-//        String selectedProduct = scanner.nextLine();
-//        //needs to convert to integer currently, may not need this
-//        int selectProductNumber = Integer.parseInt(selectedProduct);
 
-        //product entered by the user
-//        vendingMachine.selectProduct(selectProductNumber);
-
-        //request coins - need to change this to bills
-        //calls method from TextBasedVendingMachine class
-//        Scanner scanner = new Scanner(System.in);
-//        vendingMachine.displayEnterCoinsMessage();
-//        String userEnteredCoins = scanner.nextLine();
-
-        //convert String to array using method inside of Coin class
-//        int[] enteredCoins = Coin.parseCoins(userEnteredCoins);
-
-        //pass coins entered into the vending machine
-//        vendingMachine.enterCoins(enteredCoins);
-//
-//        //display change message
-//        vendingMachine.displayChangeMessage();
 
     }
 

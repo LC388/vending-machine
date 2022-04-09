@@ -1,5 +1,10 @@
 package com.techelevator;
 
+import com.techelevator.vmObjects.Candy;
+import com.techelevator.vmObjects.Chips;
+import com.techelevator.vmObjects.Drink;
+import com.techelevator.vmObjects.Gum;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

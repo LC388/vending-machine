@@ -1,13 +1,5 @@
 package com.techelevator;
-import com.techelevator.Product;
-import com.techelevator.Candy;
-import com.techelevator.Chips;
-import com.techelevator.Drink;
-import com.techelevator.Gum;
-import com.techelevator.VendingItem;
-import com.techelevator.Inventory;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -112,7 +104,7 @@ public class TextBasedVendingMachine implements VendingMachine{
     @Override
     public void displayEnterBillsMessage() {
         //asks user to enter coins (need to change to bills)
-        System.out.println("Please enter amount: (1) $1; (2) $5; (3) $10; (4) $20; (5) $50; (6) $100; (7) stop entering money");
+        System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) $20; (e) $50; (f) $100; (g) stop entering money");
         System.out.println("Current money added: " + customerBalance);
         enterBills();
     }
@@ -123,32 +115,32 @@ public class TextBasedVendingMachine implements VendingMachine{
 
         //scanner to get input
         Scanner billsEnteredScanner = new Scanner(System.in);
-        int billsEnteredInput = billsEnteredScanner.nextInt();
+        String billsEnteredInput = billsEnteredScanner.nextLine();
 
-        if(billsEnteredInput == 1){
+        if(billsEnteredInput.equals("a")){
             customerBalance += 1.0;
             displayEnterBillsMessage();
-        } else if(billsEnteredInput == 2){
+        } else if(billsEnteredInput.equals("b")){
             customerBalance += 5.0;
             displayEnterBillsMessage();
-        }else if(billsEnteredInput == 3){
+        }else if(billsEnteredInput.equals("c")){
             customerBalance += 10.0;
             displayEnterBillsMessage();
-        }else if(billsEnteredInput == 4){
+        }else if(billsEnteredInput.equals("d")){
             customerBalance += 20.0;
             displayEnterBillsMessage();
-        } else if(billsEnteredInput == 5){
+        } else if(billsEnteredInput.equals("e")){
             customerBalance += 50.0;
             displayEnterBillsMessage();
-        }else if(billsEnteredInput == 6){
+        }else if(billsEnteredInput.equals("f")){
             customerBalance += 100.0;
             displayEnterBillsMessage();
-        } else if(billsEnteredInput == 7){
+        } else if(billsEnteredInput.equals("g")){
             purchaseMenu();
         }
 
-        //create SimpleCalculator object which implements Calculator interface
-        Calculator calculator = new SimpleCalculator();
+        //create SimpleCalculator object
+        SimpleCalculator calculator = new SimpleCalculator();
 
         //gets this from Product class
 //        Product product = Product.valueOf(this.selectedProduct);

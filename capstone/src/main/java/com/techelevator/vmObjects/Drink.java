@@ -1,6 +1,8 @@
-package com.techelevator;
+package com.techelevator.vmObjects;
 
-public class Drink extends VendingItem{
+import com.techelevator.VendingItem;
+
+public class Drink extends VendingItem {
     public Drink(String code, String name, String price, String type, String quantity) {
         super(code, name, price, type, quantity);
         // TODO Auto-generated constructor stub
