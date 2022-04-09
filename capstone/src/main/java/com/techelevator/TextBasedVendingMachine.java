@@ -99,6 +99,18 @@ public class TextBasedVendingMachine implements VendingMachine{
     @Override
     public void selectProduct(String code) {
         //user selects an item that they want from the list of available products
+        //show list of available products
+        displayProducts();
+        //ask them to pick one
+        Scanner pickProductScanner = new Scanner(System.in);
+        String productSelection = pickProductScanner.nextLine();
+
+        //if code doesn't exist, customer is informed and returned to purchase menu
+
+
+        //if sold out, customer informed, returned to purchase menu
+        //valid product? dispensed to customer (prints item name, cost and money remaining)
+        //after dispensed, update customerBalance and return to purchase menu
     }
 
     @Override

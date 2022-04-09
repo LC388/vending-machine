@@ -31,6 +31,7 @@ public class Inventory {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine(); //reads everything in as a string
                 String [] individualItems = line.split("\\|"); //split up that string
+
                 String code = individualItems[0];
                 String name = individualItems[1];
                 String price = individualItems[2];
