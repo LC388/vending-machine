@@ -52,7 +52,6 @@ public class TextBasedVendingMachine implements VendingMachine{
         //displays welcome message and choices
         System.out.println("Products available");
 
-        //gets values from the getInventoryItems in the Product class
         this.inventory = new Inventory();
         List<VendingItem> listOfItems = inventory.getVendingItems();
         for (int i = 0; i < listOfItems.size(); i++) {
@@ -83,7 +82,7 @@ public class TextBasedVendingMachine implements VendingMachine{
         if(purchaseMenuScannerStringInput.equals("1")){
             displayEnterBillsMessage();
         } else if(purchaseMenuScannerStringInput.equals("2")){
-            System.out.println("TODO select a product");
+            selectProduct();
         } else if(purchaseMenuScannerStringInput.equals("3")){
             System.out.println("TODO finish transaction");
         } else if(purchaseMenuScannerStringInput.equals("4")){
@@ -97,18 +96,74 @@ public class TextBasedVendingMachine implements VendingMachine{
     }
 
     @Override
-    public void selectProduct(String code) {
+    public void selectProduct() {
         //user selects an item that they want from the list of available products
         //show list of available products
         displayProducts();
         //ask them to pick one
+        System.out.println("Enter the code for the item you'd like");
         Scanner pickProductScanner = new Scanner(System.in);
         String productSelection = pickProductScanner.nextLine();
 
-        //if code doesn't exist, customer is informed and returned to purchase menu
+        this.inventory = new Inventory();
+        List<VendingItem> listOfItems = inventory.getVendingItems();
+
+        //            //if code doesn't exist, customer is informed and returned to purchase menu
+//            if (!doesItemExist) {
+//                System.out.println("That code does not exist");
+//                purchaseMenu();
+//            }
+
+        //does product code exist in the list?
+        boolean doesItemExist = false;
+        for(int i = 0; i<listOfItems.size(); i++) {
+            if (productSelection.equals(listOfItems.get(i).getCode())) {
+                doesItemExist = true;
+                VendingItem chosen = listOfItems.get(i);
 
 
-        //if sold out, customer informed, returned to purchase menu
+                //if sold out, customer informed, returned to purchase menu
+
+                if (chosen.getQuantity() < 0) {
+                    System.out.println("This item is sold out");
+                    purchaseMenu();
+                } else {
+                    //if qty is > 0, update the quantity (qty - 1)
+                    chosen.setQuantity(chosen.getQuantity() - 1);
+                    inventory.setVendingItems(listOfItems.get());
+
+                    displayProducts();
+
+                }
+            }
+        }
+
+        //for (int i = 0; i < listOfItems.size(); i++) {
+        //						if(getProductCode.equals(listOfItems.get(i).getCode()))  {
+        //							codeExist = true;
+        //							String itemName = listOfItems.get(i).getName();
+        //							double itemPrice = listOfItems.get(i).getPrice();
+        //							int itemQuantity = listOfItems.get(i).getQuantity();
+        //							///////////////////
+        //							boolean inStock = false;
+        //							if(itemQuantity > 0) {
+        //								inStock = true;
+        //							} else {
+        //								System.out.println("Item out of stock! Please select other items.");
+        //							}
+        //							boolean enoughMoney = false;
+        //							if(itemPrice <= customerBalance) {
+        //								enoughMoney = true;
+        //								NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        //								customerBalance = customerBalance - itemPrice;
+        //								//update Inventory quantity
+        //								listOfItems.get(i).setQuantity(listOfItems.get(i).getQuantity() - 1);
+        //
+        //
+        //								//update Customer inventory
+        //								String code = listOfItems.get(i).getCode();
+
+
         //valid product? dispensed to customer (prints item name, cost and money remaining)
         //after dispensed, update customerBalance and return to purchase menu
     }

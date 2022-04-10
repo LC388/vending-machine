@@ -38,7 +38,7 @@ public class Inventory {
                 String type = individualItems[3];
 
                 //we always start at 5
-                String quantity = "5";
+                int quantity = 5;
 
                 //make a new object out of each item based on their type
                 if(type.equals("Chip")) {
@@ -69,4 +69,7 @@ public class Inventory {
         return vendingItems;
     }
 
+    public void setVendingItems(List<VendingItem> vendingItems) {
+        this.vendingItems = vendingItems;
+    }
 }

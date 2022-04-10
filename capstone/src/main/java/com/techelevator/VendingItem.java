@@ -7,12 +7,12 @@ public abstract class VendingItem {
     private String type;
     private int quantity;
 
-    public VendingItem (String code, String name, String price, String type, String quantity) {
+    public VendingItem (String code, String name, String price, String type, int quantity) {
         this.name = name;
         this.price = Double.parseDouble(price);
         this.code = code;
         this.type = type;
-        this.quantity = Integer.parseInt(quantity);
+        this.quantity = quantity;
 
     }
 

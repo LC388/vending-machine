@@ -4,7 +4,7 @@ import com.techelevator.VendingItem;
 
 public class Gum extends VendingItem {
 
-    public Gum(String code, String name, String price, String type, String quantity) {
+    public Gum(String code, String name, String price, String type, int quantity) {
         super(code, name, price, type, quantity);
         // TODO Auto-generated constructor stub
     }

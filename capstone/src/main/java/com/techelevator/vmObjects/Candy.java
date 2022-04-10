@@ -3,7 +3,7 @@ package com.techelevator.vmObjects;
 import com.techelevator.VendingItem;
 
 public class Candy extends VendingItem {
-    public Candy(String code, String name, String price, String type, String quantity) {
+    public Candy(String code, String name, String price, String type, int quantity) {
         super(code, name, price, type, quantity);
         // TODO Auto-generated constructor stub
     }
