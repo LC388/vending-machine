@@ -23,7 +23,7 @@ public class Inventory {
 
         vendingItems = new ArrayList<>();
 
-        File newFile = new File("vendingmachine.csv");
+        File newFile = new File("capstone/vendingmachine.csv");
         Scanner fileScanner;
         try {
             //this reads from vendingmachine.csv
@@ -59,11 +59,8 @@ public class Inventory {
         }
     }
 
-    public VendingItem getPurchaseItem(String code) {
-        // If not exist
-        return null;
 
-    }
+
 
     public List<VendingItem> getVendingItems() {
         return vendingItems;

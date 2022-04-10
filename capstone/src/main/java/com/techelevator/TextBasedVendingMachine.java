@@ -7,7 +7,7 @@ public class TextBasedVendingMachine implements VendingMachine{
 
     private int selectedProduct; //for the selectProduct() method
     private CoinBundle change; //from enterCoins() method
-    private Inventory inventory;
+    private Inventory inventory = new Inventory();
     private double customerBalance = 0.0;
 
     @Override
@@ -51,8 +51,6 @@ public class TextBasedVendingMachine implements VendingMachine{
 
         //displays welcome message and choices
         System.out.println("Products available");
-
-        this.inventory = new Inventory();
         List<VendingItem> listOfItems = inventory.getVendingItems();
         for (int i = 0; i < listOfItems.size(); i++) {
             System.out.print(listOfItems.get(i).getCode() + " | ");
@@ -105,7 +103,6 @@ public class TextBasedVendingMachine implements VendingMachine{
         Scanner pickProductScanner = new Scanner(System.in);
         String productSelection = pickProductScanner.nextLine();
 
-        this.inventory = new Inventory();
         List<VendingItem> listOfItems = inventory.getVendingItems();
 
         //            //if code doesn't exist, customer is informed and returned to purchase menu
@@ -128,10 +125,7 @@ public class TextBasedVendingMachine implements VendingMachine{
                     System.out.println("This item is sold out");
                     purchaseMenu();
                 } else {
-                    //if qty is > 0, update the quantity (qty - 1)
-                    chosen.setQuantity(chosen.getQuantity() - 1);
-                    inventory.setVendingItems(listOfItems.get());
-
+                chosen.subtractQuantity(1);
                     displayProducts();
 
                 }

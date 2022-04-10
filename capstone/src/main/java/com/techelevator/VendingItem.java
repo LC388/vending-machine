@@ -31,6 +31,10 @@ public abstract class VendingItem {
         this.quantity = quantity;
     }
 
+    public void subtractQuantity(int change){
+        quantity-= change;
+    }
+
 
     public String getName() {
         return name;
