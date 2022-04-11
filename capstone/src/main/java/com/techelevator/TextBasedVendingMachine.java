@@ -1,14 +1,16 @@
 package com.techelevator;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Scanner;
 
-public class TextBasedVendingMachine implements VendingMachine{
+public class TextBasedVendingMachine implements VendingMachine {
 
     private int selectedProduct; //for the selectProduct() method
     private CoinBundle change; //from enterCoins() method
     private Inventory inventory = new Inventory();
-    private double customerBalance = 0.0;
+    private double customerBalance = 0.00;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     @Override
     public void mainMenu() {
@@ -68,18 +70,18 @@ public class TextBasedVendingMachine implements VendingMachine{
         System.out.println("1) Feed Money into machine");
         System.out.println("2) Select a product");
         System.out.println("3) Finish Transaction");
-        System.out.println("Current money added: " + customerBalance);
+        System.out.println("Current money added: $" + df.format(customerBalance));
         System.out.println("");
         System.out.println("Please enter your selection: ");
 
-        //collect user input, assign to int variable
+        //collect user input, assign to String variable
         Scanner purchaseMenuScanner = new Scanner(System.in);
         String purchaseMenuScannerStringInput = purchaseMenuScanner.nextLine();
-//        int purchaseMenuInput = Integer.parseInt(purchaseMenuScanner.nextLine());
 
+        //Purchase menu choices
         if(purchaseMenuScannerStringInput.equals("1")){
             displayEnterBillsMessage();
-        } else if(purchaseMenuScannerStringInput.equals("2")){
+        } else if(purchaseMenuScannerStringInput.equals("2")) {
             selectProduct();
         } else if(purchaseMenuScannerStringInput.equals("3")){
             System.out.println("TODO finish transaction");
@@ -94,7 +96,7 @@ public class TextBasedVendingMachine implements VendingMachine{
     }
 
     @Override
-    public void selectProduct() {
+    public void selectProduct(){
         //user selects an item that they want from the list of available products
         //show list of available products
         displayProducts();
@@ -105,68 +107,73 @@ public class TextBasedVendingMachine implements VendingMachine{
 
         List<VendingItem> listOfItems = inventory.getVendingItems();
 
-        //            //if code doesn't exist, customer is informed and returned to purchase menu
-//            if (!doesItemExist) {
-//                System.out.println("That code does not exist");
-//                purchaseMenu();
-//            }
 
         //does product code exist in the list?
         boolean doesItemExist = false;
-        for(int i = 0; i<listOfItems.size(); i++) {
-            if (productSelection.equals(listOfItems.get(i).getCode())) {
+        int chosenIndex = 0;
+        String chosenCode = null;
+        double chosenPrice = 0.00;
+        String chosenName = null;
+        int chosenQuantity = 0;
+        int i = 0;
+
+        //if that item code is in the list, set the variables correctly
+        for(i = 0; i<listOfItems.size(); i++) {
+            if (productSelection.equalsIgnoreCase(listOfItems.get(i).getCode())) {
                 doesItemExist = true;
-                VendingItem chosen = listOfItems.get(i);
-
-
-                //if sold out, customer informed, returned to purchase menu
-
-                if (chosen.getQuantity() < 0) {
-                    System.out.println("This item is sold out");
-                    purchaseMenu();
-                } else {
-                chosen.subtractQuantity(1);
-                    displayProducts();
-
-                }
+                chosenIndex = i;
+                chosenPrice = listOfItems.get(i).getPrice();
+                chosenCode = listOfItems.get(i).getCode();
+                chosenQuantity = listOfItems.get(i).getQuantity();
+                chosenName = listOfItems.get(i).getName();
             }
         }
 
-        //for (int i = 0; i < listOfItems.size(); i++) {
-        //						if(getProductCode.equals(listOfItems.get(i).getCode()))  {
-        //							codeExist = true;
-        //							String itemName = listOfItems.get(i).getName();
-        //							double itemPrice = listOfItems.get(i).getPrice();
-        //							int itemQuantity = listOfItems.get(i).getQuantity();
-        //							///////////////////
-        //							boolean inStock = false;
-        //							if(itemQuantity > 0) {
-        //								inStock = true;
-        //							} else {
-        //								System.out.println("Item out of stock! Please select other items.");
-        //							}
-        //							boolean enoughMoney = false;
-        //							if(itemPrice <= customerBalance) {
-        //								enoughMoney = true;
-        //								NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        //								customerBalance = customerBalance - itemPrice;
-        //								//update Inventory quantity
-        //								listOfItems.get(i).setQuantity(listOfItems.get(i).getQuantity() - 1);
-        //
-        //
-        //								//update Customer inventory
-        //								String code = listOfItems.get(i).getCode();
+                //does item code exist?
+                if(doesItemExist == false){
+                    System.out.println("That item code does not exist. Please try again");
+                    purchaseMenu();
+
+                }
+
+                //do they have enough money?
+                if(customerBalance < chosenPrice){
+                    System.out.println("Please enter more money for that item");
+                    purchaseMenu();
+                }
 
 
-        //valid product? dispensed to customer (prints item name, cost and money remaining)
-        //after dispensed, update customerBalance and return to purchase menu
+
+                //if sold out, customer informed, returned to purchase menu
+                //else subtract 1 from that item's quantity
+                if (chosenQuantity < 0) {
+                    System.out.println("This item is sold out");
+                    purchaseMenu();
+                } else {
+                    listOfItems.get(chosenIndex).subtractQuantity(1);
+                    displayProducts();
+                }
+
+
+                //valid product? dispense to customer (print item name, cost and money remaining)
+
+                setCustomerBalance(getCustomerBalance() - chosenPrice);
+                System.out.println("Item dispensed: " + chosenName + " Item cost: $" + chosenPrice + " Current balance: $" + customerBalance);
+
+                //after dispensed, update customerBalance and return to purchase menu
+                purchaseMenu();
+
+
+
+
+
     }
 
     @Override
     public void displayEnterBillsMessage() {
         //asks user to enter coins (need to change to bills)
         System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) $20; (e) $50; (f) $100; (g) stop entering money");
-        System.out.println("Current money added: " + customerBalance);
+        System.out.println("Current money added: $" + df.format(customerBalance));
         enterBills();
     }
 
@@ -178,25 +185,25 @@ public class TextBasedVendingMachine implements VendingMachine{
         Scanner billsEnteredScanner = new Scanner(System.in);
         String billsEnteredInput = billsEnteredScanner.nextLine();
 
-        if(billsEnteredInput.equals("a")){
+        if(billsEnteredInput.equalsIgnoreCase("a")){
             customerBalance += 1.0;
             displayEnterBillsMessage();
-        } else if(billsEnteredInput.equals("b")){
+        } else if(billsEnteredInput.equalsIgnoreCase("b")){
             customerBalance += 5.0;
             displayEnterBillsMessage();
-        }else if(billsEnteredInput.equals("c")){
+        }else if(billsEnteredInput.equalsIgnoreCase("c")){
             customerBalance += 10.0;
             displayEnterBillsMessage();
-        }else if(billsEnteredInput.equals("d")){
+        }else if(billsEnteredInput.equalsIgnoreCase("d")){
             customerBalance += 20.0;
             displayEnterBillsMessage();
-        } else if(billsEnteredInput.equals("e")){
+        } else if(billsEnteredInput.equalsIgnoreCase("e")){
             customerBalance += 50.0;
             displayEnterBillsMessage();
-        }else if(billsEnteredInput.equals("f")){
+        }else if(billsEnteredInput.equalsIgnoreCase("f")){
             customerBalance += 100.0;
             displayEnterBillsMessage();
-        } else if(billsEnteredInput.equals("g")){
+        } else if(billsEnteredInput.equalsIgnoreCase("g")){
             purchaseMenu();
         }
 
@@ -233,4 +240,7 @@ public class TextBasedVendingMachine implements VendingMachine{
         return customerBalance;
     }
 
+    public void setCustomerBalance(double customerBalance) {
+        this.customerBalance = customerBalance;
+    }
 }

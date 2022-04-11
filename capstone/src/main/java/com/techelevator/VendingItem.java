@@ -1,15 +1,18 @@
 package com.techelevator;
 
+import java.text.DecimalFormat;
+
 public abstract class VendingItem {
     private String name;
     private double price;
     private String code;
     private String type;
     private int quantity;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
-    public VendingItem (String code, String name, String price, String type, int quantity) {
+    public VendingItem (String code, String name, double price, String type, int quantity) {
         this.name = name;
-        this.price = Double.parseDouble(price);
+        this.price = price;
         this.code = code;
         this.type = type;
         this.quantity = quantity;

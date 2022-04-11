@@ -1,9 +1,9 @@
 package com.techelevator;
 
-import com.techelevator.vmObjects.Candy;
-import com.techelevator.vmObjects.Chips;
-import com.techelevator.vmObjects.Drink;
-import com.techelevator.vmObjects.Gum;
+import com.techelevator.vmItems.Candy;
+import com.techelevator.vmItems.Chips;
+import com.techelevator.vmItems.Drink;
+import com.techelevator.vmItems.Gum;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,7 +23,7 @@ public class Inventory {
 
         vendingItems = new ArrayList<>();
 
-        File newFile = new File("capstone/vendingmachine.csv");
+        File newFile = new File("vendingmachine.csv");
         Scanner fileScanner;
         try {
             //this reads from vendingmachine.csv
@@ -34,7 +34,7 @@ public class Inventory {
 
                 String code = individualItems[0];
                 String name = individualItems[1];
-                String price = individualItems[2];
+                double price = Double.parseDouble(individualItems[2]);
                 String type = individualItems[3];
 
                 //we always start at 5
