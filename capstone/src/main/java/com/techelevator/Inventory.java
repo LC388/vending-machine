@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-//this class gets the inventory items out of the csv file so the main class can display them
+//this class pulls the inventory items out of the csv file so the main class can display them
 
 
 public class Inventory {
@@ -29,18 +29,22 @@ public class Inventory {
             //this reads from vendingmachine.csv
             fileScanner = new Scanner(newFile);
             while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine(); //reads everything in as a string
-                String [] individualItems = line.split("\\|"); //split up that string
+                String line = fileScanner.nextLine(); //reads each line as a string
 
+                //since there are multiple values per line, putting them in an array
+                //so we can split them up
+                String [] individualItems = line.split("\\|");
+
+                //assigning values based on their position in the array
                 String code = individualItems[0];
                 String name = individualItems[1];
                 double price = Double.parseDouble(individualItems[2]);
                 String type = individualItems[3];
 
-                //we always start at 5
+                //we always start at 5. Value wasn't in the csv, so assigning it here
                 int quantity = 5;
 
-                //make a new object out of each item based on their type
+                //add each item into the vendingItems list as a new object, based on their type
                 if(type.equals("Chip")) {
                     vendingItems.add(new Chips(code, name, price, type, quantity));
                 } else if (type.equals("Candy")) {
@@ -53,15 +57,14 @@ public class Inventory {
 
             }
 
-
+        //in case the inventory file is not found
         } catch (FileNotFoundException e) {
             System.out.println("Inventory file not found");
         }
     }
 
 
-
-
+    //getters and setters
     public List<VendingItem> getVendingItems() {
         return vendingItems;
     }

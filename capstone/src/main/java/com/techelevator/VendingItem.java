@@ -8,8 +8,10 @@ public abstract class VendingItem {
     private String code;
     private String type;
     private int quantity;
-    private static final DecimalFormat df = new DecimalFormat("0.00");
+    private static final DecimalFormat df = new DecimalFormat("0.00"); //used to format some of the $ decimals
 
+
+    //constructor
     public VendingItem (String code, String name, double price, String type, int quantity) {
         this.name = name;
         this.price = price;
@@ -18,6 +20,8 @@ public abstract class VendingItem {
         this.quantity = quantity;
 
     }
+
+    //getters and setters
 
 
     public String getCode() {

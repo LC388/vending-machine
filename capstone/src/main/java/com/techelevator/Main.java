@@ -9,14 +9,11 @@ public class Main {
         System.out.println("******************************");
         System.out.println();
 
-
-        //call the main menu method from the TextBasedVending machine class
+        //Make a new VendingMachine object
         VendingMachine vendingMachine = new TextBasedVendingMachine();
+
+        //call the main menu method from the TextBasedVendingMachine class
         vendingMachine.mainMenu();
-
-
-
-
 
     }
 

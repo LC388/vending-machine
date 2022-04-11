@@ -6,8 +6,6 @@ import java.util.Scanner;
 
 public class TextBasedVendingMachine implements VendingMachine {
 
-    private int selectedProduct; //for the selectProduct() method
-    private CoinBundle change; //from enterCoins() method
     private Inventory inventory = new Inventory();
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private double customerBalance = 0.00;
@@ -100,17 +98,19 @@ public class TextBasedVendingMachine implements VendingMachine {
     @Override
     public void selectProduct(){
         //user selects an item that they want from the list of available products
+
         //show list of available products
         displayProducts();
+
         //ask them to pick one
         System.out.println("Enter the code for the item you'd like");
         Scanner pickProductScanner = new Scanner(System.in);
         String productSelection = pickProductScanner.nextLine();
 
+        //create a new list to keep track of inventory items
         List<VendingItem> listOfItems = inventory.getVendingItems();
 
-
-        //does product code exist in the list?
+        //Defining variables will be used throughout this method
         boolean doesItemExist = false;
         int chosenIndex = 0;
         String chosenCode = null;
@@ -120,7 +120,9 @@ public class TextBasedVendingMachine implements VendingMachine {
         String chosenType = null;
         int i = 0;
 
-        //if that item code is in the list, set the variables correctly
+
+        //does product code exist in the list?
+        //if that item code is in the list, set the variables for that one item
         for(i = 0; i<listOfItems.size(); i++) {
             if (productSelection.equalsIgnoreCase(listOfItems.get(i).getCode())) {
                 doesItemExist = true;
@@ -133,14 +135,17 @@ public class TextBasedVendingMachine implements VendingMachine {
             }
         }
 
-                //does item code exist?
+                //If the item isn't found in the previous loop, the value for doesItemExist
+                //will remain false. We'll tell them and make them go back to the
+                //purchase menu
                 if(doesItemExist == false){
                     System.out.println("That item code does not exist. Please try again");
                     purchaseMenu();
-
                 }
 
-                //do they have enough money?
+                //do they have enough money for this item?
+                //this wasn't in the ReadMe but seemed important to find out
+                //if they don't, they go back to the purchase menu
                 if(customerBalance < chosenPrice){
                     System.out.println("Please enter more money for that item");
                     purchaseMenu();
@@ -148,8 +153,9 @@ public class TextBasedVendingMachine implements VendingMachine {
 
 
 
-                //if sold out, customer informed, returned to purchase menu
-                //else subtract 1 from that item's quantity
+                //if selected item is sold out, customer informed, returned to purchase menu
+                //if it's not sold out, subtract 1 from the quantity
+                //subtractQuantity method is from the VendingItem class
                 if (chosenQuantity <= 0) {
                     System.out.println("This item is sold out");
                     purchaseMenu();
@@ -160,6 +166,7 @@ public class TextBasedVendingMachine implements VendingMachine {
 
 
                 //valid product? dispense to customer (print item name, cost and money remaining)
+                //setCustomerBalance is a setter at the end of this class
                 setCustomerBalance(getCustomerBalance() - chosenPrice);
                 System.out.println("Item dispensed: " + chosenName + " Item cost: $" + chosenPrice + " Current balance: $" + customerBalance);
 
@@ -174,12 +181,8 @@ public class TextBasedVendingMachine implements VendingMachine {
                     System.out.println("Chew Chew, Yum!");
                 }
 
-                //after dispensed, return to purchase menu
+                //after dispensing, return to purchase menu
                 purchaseMenu();
-
-
-
-
 
     }
 
@@ -199,6 +202,7 @@ public class TextBasedVendingMachine implements VendingMachine {
         Scanner billsEnteredScanner = new Scanner(System.in);
         String billsEnteredInput = billsEnteredScanner.nextLine();
 
+        //keep track of balance, display to customer
         if(billsEnteredInput.equalsIgnoreCase("a")){
             customerBalance += 1.0;
             displayEnterBillsMessage();
@@ -221,46 +225,27 @@ public class TextBasedVendingMachine implements VendingMachine {
             purchaseMenu();
         }
 
-        //create SimpleCalculator object
-        SimpleCalculator calculator = new SimpleCalculator();
-
-        //gets this from Product class
-//        Product product = Product.valueOf(this.selectedProduct);
-
-        //gets price
-//        int total = calculator.calculateTotal(new CoinBundle(coins));
-
-        //total amount - price
-//        int changeAmount = total - product.getPrice();
-//        change = calculator.calculateChange(changeAmount);
-
-
     }
 
     @Override
     public void displayChangeMessage() {
-        //displays a message letting the user know his change amount and coins.
+
+        //calculates total coins needed for change
         int cents = (int) (customerBalance * 100);
         int numQuarters = cents / 25;
         int numDimes    = (cents % 25) / 10;
         int numNickels  = ((cents % 25) % 10) / 5;
         int numPennies  = ((cents % 25) % 10) % 5;
 
+        //displays total change to user
         System.out.println(numQuarters + " Quarters");
         System.out.println(numDimes    + " Dimes");
         System.out.println(numNickels  + " Nickels");
         System.out.println(numPennies  + " Pennies");
 
-
-        //.getTotal is from CoinBundle class
-//        System.out.println(" ");
-//        System.out.println("Your change is: "+ change.getTotal()+ "cents split as follows: ");
-//        System.out.println("   25 cent coins: "+ change.number25CentCoins);
-//        System.out.println("   10 cent coins: "+ change.number10CentCoins);
-//        System.out.println("   5  cent coins: "+ change.number5CentCoins);
-
     }
 
+    @Override
     public void finishTransaction(){
 
         //The customer's money is returned using nickels, dimes, and quarters (using the smallest amount of coins possible).
