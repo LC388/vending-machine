@@ -240,12 +240,24 @@ public class TextBasedVendingMachine implements VendingMachine {
     @Override
     public void displayChangeMessage() {
         //displays a message letting the user know his change amount and coins.
+        int cents = (int) (customerBalance * 100);
+        int numQuarters = cents / 25;
+        int numDimes    = (cents % 25) / 10;
+        int numNickels  = ((cents % 25) % 10) / 5;
+        int numPennies  = ((cents % 25) % 10) % 5;
+
+        System.out.println(numQuarters + " Quarters");
+        System.out.println(numDimes    + " Dimes");
+        System.out.println(numNickels  + " Nickels");
+        System.out.println(numPennies  + " Pennies");
+
+
         //.getTotal is from CoinBundle class
-        System.out.println(" ");
-        System.out.println("Your change is: "+ change.getTotal()+ "cents split as follows: ");
-        System.out.println("   25 cent coins: "+ change.number25CentCoins);
-        System.out.println("   10 cent coins: "+ change.number10CentCoins);
-        System.out.println("   5  cent coins: "+ change.number5CentCoins);
+//        System.out.println(" ");
+//        System.out.println("Your change is: "+ change.getTotal()+ "cents split as follows: ");
+//        System.out.println("   25 cent coins: "+ change.number25CentCoins);
+//        System.out.println("   10 cent coins: "+ change.number10CentCoins);
+//        System.out.println("   5  cent coins: "+ change.number5CentCoins);
 
     }
 
@@ -254,7 +266,7 @@ public class TextBasedVendingMachine implements VendingMachine {
         //The customer's money is returned using nickels, dimes, and quarters (using the smallest amount of coins possible).
         System.out.println("");
         System.out.println("** Thanks for your purchase **");
-        //displayChangeMessage();
+        displayChangeMessage();
 
         //The machine's current balance must be updated to $0 remaining.
         customerBalance = 0;
