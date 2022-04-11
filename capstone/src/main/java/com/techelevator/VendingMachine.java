@@ -12,7 +12,7 @@ public interface VendingMachine {
     void purchaseMenu();
 
     //user selects an item that they want from the list of available products
-    void selectProduct() throws ItemNotFoundException;
+    void selectProduct();
 
     //message display to enter money
     void displayEnterBillsMessage();

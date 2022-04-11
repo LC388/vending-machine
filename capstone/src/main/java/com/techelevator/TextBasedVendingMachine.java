@@ -9,8 +9,8 @@ public class TextBasedVendingMachine implements VendingMachine {
     private int selectedProduct; //for the selectProduct() method
     private CoinBundle change; //from enterCoins() method
     private Inventory inventory = new Inventory();
-    private double customerBalance = 0.00;
     private static final DecimalFormat df = new DecimalFormat("0.00");
+    private double customerBalance = 0.00;
 
     @Override
     public void mainMenu() {
@@ -21,6 +21,7 @@ public class TextBasedVendingMachine implements VendingMachine {
 
         //ask customer to choose products
         System.out.println("");
+        System.out.println("*** Main Menu ***");
         System.out.println("1) Display vending machine items");
         System.out.println("2) Make a purchase");
         System.out.println("3) Exit");
@@ -57,7 +58,7 @@ public class TextBasedVendingMachine implements VendingMachine {
         for (int i = 0; i < listOfItems.size(); i++) {
             System.out.print(listOfItems.get(i).getCode() + " | ");
             System.out.print(listOfItems.get(i).getName() + " | ");
-            System.out.print("$" + listOfItems.get(i).getPrice() + " | ");
+            System.out.print("$" + df.format(listOfItems.get(i).getPrice()) + " | ");
             System.out.println("Qty: " + listOfItems.get(i).getQuantity());
         }
 
@@ -67,6 +68,7 @@ public class TextBasedVendingMachine implements VendingMachine {
     public void purchaseMenu() {
         //displays the purchase menu (feed money, select product, finish transaction, current money)
         System.out.println("");
+        System.out.println("*** Purchase Menu ***");
         System.out.println("1) Feed Money into machine");
         System.out.println("2) Select a product");
         System.out.println("3) Finish Transaction");
@@ -84,7 +86,7 @@ public class TextBasedVendingMachine implements VendingMachine {
         } else if(purchaseMenuScannerStringInput.equals("2")) {
             selectProduct();
         } else if(purchaseMenuScannerStringInput.equals("3")){
-            System.out.println("TODO finish transaction");
+            finishTransaction();
         } else if(purchaseMenuScannerStringInput.equals("4")){
             System.out.println("TODO hidden menu");
         } else {
@@ -115,6 +117,7 @@ public class TextBasedVendingMachine implements VendingMachine {
         double chosenPrice = 0.00;
         String chosenName = null;
         int chosenQuantity = 0;
+        String chosenType = null;
         int i = 0;
 
         //if that item code is in the list, set the variables correctly
@@ -126,6 +129,7 @@ public class TextBasedVendingMachine implements VendingMachine {
                 chosenCode = listOfItems.get(i).getCode();
                 chosenQuantity = listOfItems.get(i).getQuantity();
                 chosenName = listOfItems.get(i).getName();
+                chosenType = listOfItems.get(i).getType();
             }
         }
 
@@ -146,7 +150,7 @@ public class TextBasedVendingMachine implements VendingMachine {
 
                 //if sold out, customer informed, returned to purchase menu
                 //else subtract 1 from that item's quantity
-                if (chosenQuantity < 0) {
+                if (chosenQuantity <= 0) {
                     System.out.println("This item is sold out");
                     purchaseMenu();
                 } else {
@@ -156,11 +160,21 @@ public class TextBasedVendingMachine implements VendingMachine {
 
 
                 //valid product? dispense to customer (print item name, cost and money remaining)
-
                 setCustomerBalance(getCustomerBalance() - chosenPrice);
                 System.out.println("Item dispensed: " + chosenName + " Item cost: $" + chosenPrice + " Current balance: $" + customerBalance);
 
-                //after dispensed, update customerBalance and return to purchase menu
+                //also print silly message based on Object type
+                if(chosenType.equals("Chips")){
+                    System.out.println("Crunch Crunch, Yum!");
+                } else if (chosenType.equals("Candy")){
+                    System.out.println("Munch Munch, Yum!");
+                } else if (chosenType.equals("Drink")){
+                    System.out.println("Glug Glug, Yum!");
+                } else if (chosenType.equals("Gum")){
+                    System.out.println("Chew Chew, Yum!");
+                }
+
+                //after dispensed, return to purchase menu
                 purchaseMenu();
 
 
@@ -232,6 +246,21 @@ public class TextBasedVendingMachine implements VendingMachine {
         System.out.println("   25 cent coins: "+ change.number25CentCoins);
         System.out.println("   10 cent coins: "+ change.number10CentCoins);
         System.out.println("   5  cent coins: "+ change.number5CentCoins);
+
+    }
+
+    public void finishTransaction(){
+
+        //The customer's money is returned using nickels, dimes, and quarters (using the smallest amount of coins possible).
+        System.out.println("");
+        System.out.println("** Thanks for your purchase **");
+        //displayChangeMessage();
+
+        //The machine's current balance must be updated to $0 remaining.
+        customerBalance = 0;
+
+        //After completing their purchase, the user is returned to the "Main" menu to continue using the vending machine.
+        mainMenu();
 
     }
 
