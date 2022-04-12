@@ -202,7 +202,7 @@ public class TextBasedVendingMachine implements VendingMachine {
     @Override
     public void displayEnterBillsMessage() {
         //asks user to enter coins (need to change to bills)
-        System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) $20; (e) $50; (f) $100; (g) stop entering money");
+        System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) stop entering money");
         System.out.println("");
         System.out.println("*** Current balance: $" + df.format(customerBalance) + " ***");
         enterBills();
@@ -236,21 +236,6 @@ public class TextBasedVendingMachine implements VendingMachine {
                 addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
             displayEnterBillsMessage();
         }else if(billsEnteredInput.equalsIgnoreCase("d")){
-            customerBalance += 20.0;
-                feedMoneyValue = 20.00; //updates logFile
-                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-            displayEnterBillsMessage();
-        } else if(billsEnteredInput.equalsIgnoreCase("e")){
-            customerBalance += 50.0;
-                feedMoneyValue = 50.00; //updates logFile
-                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-            displayEnterBillsMessage();
-        }else if(billsEnteredInput.equalsIgnoreCase("f")){
-            customerBalance += 100.0;
-                feedMoneyValue = 100.00; //updates logFile
-                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-            displayEnterBillsMessage();
-        } else if(billsEnteredInput.equalsIgnoreCase("g")){
             purchaseMenu();
         }
 
