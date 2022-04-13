@@ -1,9 +1,11 @@
 package com.techelevator;
 
+import com.techelevator.caught.SelectionException;
+
 public interface VendingMachine {
 
     //displays the main menu and asks them to make a choice 1-3 or hidden menu
-    void mainMenu();
+    void mainMenu() throws SelectionException;
 
     //gets the items from the Inventory class, which pulls the data from
     // the csv file and lists them

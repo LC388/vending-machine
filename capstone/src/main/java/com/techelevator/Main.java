@@ -1,7 +1,9 @@
 package com.techelevator;
 
+import com.techelevator.caught.SelectionException;
+
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws SelectionException {
 
         //welcome message
         System.out.println("******************************");
@@ -13,9 +15,8 @@ public class Main {
         VendingMachine vendingMachine = new TextBasedVendingMachine();
 
         //call the main menu method from the TextBasedVendingMachine class
-        vendingMachine.mainMenu();
+
+     vendingMachine.mainMenu();
 
     }
-
-
 }
