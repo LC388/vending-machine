@@ -22,8 +22,6 @@ public abstract class VendingItem {
     }
 
     //getters and setters
-
-
     public String getCode() {
         return code;
     }

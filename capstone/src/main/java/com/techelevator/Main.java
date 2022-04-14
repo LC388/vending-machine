@@ -15,8 +15,7 @@ public class Main {
         VendingMachine vendingMachine = new TextBasedVendingMachine();
 
         //call the main menu method from the TextBasedVendingMachine class
-
-     vendingMachine.mainMenu();
+        vendingMachine.mainMenu();
 
     }
 }

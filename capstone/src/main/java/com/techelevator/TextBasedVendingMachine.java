@@ -15,15 +15,15 @@ public class TextBasedVendingMachine implements VendingMachine {
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private double customerBalance = 0.00;
     private MachineAudit addToLog = new MachineAudit();
+    List<VendingItem> listOfItems = inventory.getVendingItems();
 
 
+    //this method displays the main menu and asks them to make a choice 1-3 or hidden menu
     @Override
     public void mainMenu() {
-        //this method displays the main menu and asks them to make a choice 1-3 or hidden menu
-
 
         try {
-            //ask customer to choose products
+            // create scanner and ask customer to choose products
             Scanner selectProductScanner = new Scanner(System.in);
             System.out.println("");
             System.out.println("*** Main Menu ***");
@@ -46,7 +46,7 @@ public class TextBasedVendingMachine implements VendingMachine {
             } else if (productSelection.equals("3")) {
                 System.out.println("");
                 System.out.println("*** Thank you for using the Vending Machine ***");
-                System.exit(0);
+                System.exit(0); //normal termination of jvm
 
             } else if (productSelection.equals("4")) {
                 System.out.println("You've chosen the hidden sales report");
@@ -61,12 +61,11 @@ public class TextBasedVendingMachine implements VendingMachine {
         }
     }
 
+
+    //displays welcome message and choices
     @Override
     public void displayProducts() {
-
-        //displays welcome message and choices
         System.out.println("Products available");
-        List<VendingItem> listOfItems = inventory.getVendingItems();
         for (int i = 0; i < listOfItems.size(); i++) {
             System.out.print(listOfItems.get(i).getCode() + " | ");
             System.out.print(listOfItems.get(i).getName() + " | ");
@@ -76,10 +75,10 @@ public class TextBasedVendingMachine implements VendingMachine {
 
     }
 
+
+    //displays the purchase menu (feed money, select product, finish transaction, current money)
     @Override
     public void purchaseMenu() {
-
-        //displays the purchase menu (feed money, select product, finish transaction, current money)
         try {
             System.out.println("");
             System.out.println("*** Purchase Menu ***");
@@ -114,45 +113,42 @@ public class TextBasedVendingMachine implements VendingMachine {
         }
     }
 
+
+    /*
+      user selects an item that they want from the list of available product
+      shows list of available product
+      asks them to pick one
+    */
     @Override
     public void selectProduct() {
-        //user selects an item that they want from the list of available products
 
-        //show list of available product
-
-
-        //ask them to pick one
+        //This variable is used to avoid termination of jvm due to exceptions thrown
         boolean doWeNeedToTryAgain = false;
 
         do {
             try {
+                //generate scanner to receive product selection
                 displayProducts();
-                List<VendingItem> listOfItems = inventory.getVendingItems();
                 Scanner pickProductScanner = new Scanner(System.in);
                 System.out.println("");
                 System.out.println("Enter the code for the item you'd like");
                 String productSelection = pickProductScanner.nextLine();
-                //create a new list to keep track of inventory items
 
-
-                //Defining variables will be used throughout this method
-
-
-                //does product code exist in the list?
-                //if that item code is in the list, set the variables for that one item
+                //iterate through vending items to check for product code selected
                 for (VendingItem item : listOfItems) {
                     if (item.getCode().equalsIgnoreCase(productSelection)){
+                        //assign item to local object variable
                         VendingItem chosen = item;
+                        //we've found the item so no need to try again at this point
                         doWeNeedToTryAgain = false;
+                        //it exists!
                         boolean doesItemExist = true;
 
-                        //if selected item is sold out, customer informed, returned to purchase menu
-                        //if it's not sold out, subtract 1 from the quantity
-                        //subtractQuantity method is from the VendingItem class
-
-
-                        //valid product? dispense to customer (print item name, cost and money remaining)
-                        //setCustomerBalance is a setter at the end of this class
+                        /*
+                        if selected item is sold out, customer informed, returned to purchase menu
+                        if it's not sold out, subtract 1 from the quantity
+                        subtractQuantity method available via VendingItem class
+                        */
                         if (chosen.getQuantity() > 0) {
                             chosen.subtractQuantity(1);
                         } else {
@@ -160,91 +156,98 @@ public class TextBasedVendingMachine implements VendingMachine {
 
                         }
 
+                        /*
+                        check customer balance
+                        if customer has the funds, remove price of item from their current balance
+                        or insufficientFunds exception is thrown prompting user to enter more money
+                         */
                         if (customerBalance > chosen.getPrice()) {
                             setCustomerBalance(customerBalance - chosen.getPrice());
                         } else {
                             throw new InsuffecientFundsException("Please insert more money to complete transaction");
                         }
 
+
+                        /*
+                        if item doesn't exist prompt customer to input a valid code
+                         */
                         if(!doesItemExist){
-                            throw new ItemNotFoundException("Please select valid item");
+                            throw new ItemNotFoundException("Please input a valid code to receive an item from the vending machine");
                         }else {
+                            //we found a valid product dispense it to customer and print item name, cost, and money remaining
                             System.out.println("");
                             System.out.println("*** Item dispensed ***");
                             System.out.println(chosen.getName() + " | Price: $" + df.format(chosen.getPrice()) + " | Current balance: $" + df.format(customerBalance));
                             System.out.println(chosen.getSound());
-                            purchaseMenu();//if (customerBalance > chosen.getPrice()) {
-                            // System.out.println("Please enter more money for that item");
-                            //purchaseMenu();
-                            //  }
-                            //also print silly message based on Object type
+
+                            //after dispensing return to purchase menu
+                            purchaseMenu();
 
 
                             //also write it to the log file
                             addToLog.logValidItemSelected(chosen.getName(), chosen.getCode(), chosen.getPrice(), customerBalance); //updates logFile
 
-                            //after dispensing, return to purchase menu
+
                         }
                     }
                 }
             } catch (InsuffecientFundsException e) {
+                //print message and return to purchase menu
                 System.err.println(e.getMessage());
                 purchaseMenu();
             } catch (OutOfStockException f) {
+                //print messages
                 System.err.println(f.getMessage());
                 System.out.println("Enter the Code for the Item you'd like");
+                //return system to start of selectProduct() method. (current method)
                 doWeNeedToTryAgain = true;
             } catch (ItemNotFoundException g) {
                 System.err.println(g.getMessage());
+                //return system to start of selectProduct() method. (current method)
                 doWeNeedToTryAgain = true;
             }
         }while (doWeNeedToTryAgain) ;
     }
 
-            @Override
-            public void displayEnterBillsMessage () {
-                //asks user to enter coins (need to change to bills)
-                System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) stop entering money");
-                System.out.println("");
-                System.out.println("*** Current balance: $" + df.format(customerBalance) + " ***");
-                enterBills();
+    //asks user to enter coins (need to change to bills)
+    @Override
+    public void displayEnterBillsMessage () {
+        System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) stop entering money");
+        System.out.println("");
+        System.out.println("*** Current balance: $" + df.format(customerBalance) + " ***");
+        enterBills();
+    }
+
+    @Override
+    public void enterBills () {
+        //log file variable representing customer balance
+        double feedMoneyValue = 0;
+
+        try{
+            Scanner billsEnteredScanner = new Scanner(System.in);
+            String billsEnteredInput = billsEnteredScanner.nextLine();
+
+            //keep track of balance, display to customer
+            if (billsEnteredInput.equalsIgnoreCase("a")) {
+                customerBalance += 1.0;
+                feedMoneyValue = 1.00; //updates logFile
+                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
+                displayEnterBillsMessage();
+            } else if (billsEnteredInput.equalsIgnoreCase("b")) {
+                customerBalance += 5.0;
+                feedMoneyValue = 5.00; //updates logFile
+                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
+                displayEnterBillsMessage();
+            } else if (billsEnteredInput.equalsIgnoreCase("c")) {
+                customerBalance += 10.0;
+                feedMoneyValue = 10.00; //updates logFile
+                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
+                displayEnterBillsMessage();
+            } else if (billsEnteredInput.equalsIgnoreCase("d")) {
+                purchaseMenu();
+            } else {
+                throw new SelectionException("Please select a valid amount");
             }
-
-            @Override
-            public void enterBills () {
-
-                double feedMoneyValue = 0;
-
-                //receives the bills entered by the user, calculate total amount inserted and figure out change
-
-                //scanner to get input
-
-                try{
-                    Scanner billsEnteredScanner = new Scanner(System.in);
-                    String billsEnteredInput = billsEnteredScanner.nextLine();
-
-                    //keep track of balance, display to customer
-                    if (billsEnteredInput.equalsIgnoreCase("a")) {
-                        customerBalance += 1.0;
-                        feedMoneyValue = 1.00; //updates logFile
-                        addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-                        displayEnterBillsMessage();
-                    } else if (billsEnteredInput.equalsIgnoreCase("b")) {
-                        customerBalance += 5.0;
-                        feedMoneyValue = 5.00; //updates logFile
-                        addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-                        displayEnterBillsMessage();
-                    } else if (billsEnteredInput.equalsIgnoreCase("c")) {
-                        customerBalance += 10.0;
-                        feedMoneyValue = 10.00; //updates logFile
-                        addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-                        displayEnterBillsMessage();
-                    } else if (billsEnteredInput.equalsIgnoreCase("d")) {
-                        purchaseMenu();
-                    } else {
-                        throw new SelectionException("Please select a valid amount");
-                    }
-
                 } catch (SelectionException e){
                     System.err.println(e.getMessage());
                     displayEnterBillsMessage();
@@ -252,9 +255,10 @@ public class TextBasedVendingMachine implements VendingMachine {
                 }
             }
 
+
+            //Shows change given to customer
             @Override
             public void displayChangeMessage () {
-
                 //write it to the log file
                 addToLog.logChangeGiven(customerBalance); //updates logFile
 
@@ -273,10 +277,13 @@ public class TextBasedVendingMachine implements VendingMachine {
 
             }
 
+
+    /*
+    The customer's money is returned using the smallest amount of coins possible
+    quarters, dimes, and nickels
+     */
             @Override
             public void finishTransaction () {
-
-                //The customer's money is returned using nickels, dimes, and quarters (using the smallest amount of coins possible).
                 System.out.println("");
                 System.out.println("** Thanks for your purchase **");
                 System.out.println("******* Your change is *******");

@@ -15,15 +15,14 @@ import java.util.Scanner;
 
 
 public class Inventory {
+
     private List<VendingItem> vendingItems;
-
-
 
     public Inventory() {
 
         vendingItems = new ArrayList<>();
 
-        File newFile = new File("capstone/vendingmachine.csv");
+        File newFile = new File("vendingmachine.csv");
         Scanner fileScanner;
         try {
             //this reads from vendingmachine.csv
@@ -31,8 +30,10 @@ public class Inventory {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine(); //reads each line as a string
 
-                //since there are multiple values per line, putting them in an array
-                //so we can split them up
+                /*
+                since there are multiple values per line, putting them in an array
+                so we can split them up
+                 */
                 String [] individualItems = line.split("\\|");
 
                 //assigning values based on their position in the array
