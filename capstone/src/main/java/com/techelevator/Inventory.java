@@ -23,7 +23,7 @@ public class Inventory {
 
         vendingItems = new ArrayList<>();
 
-        File newFile = new File("capstone/vendingmachine.csv");
+        File newFile = new File("vendingmachine.csv");
         Scanner fileScanner;
         try {
             //this reads from vendingmachine.csv

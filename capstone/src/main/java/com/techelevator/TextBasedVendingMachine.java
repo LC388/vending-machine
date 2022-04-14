@@ -6,7 +6,9 @@ import com.techelevator.caught.OutOfStockException;
 import com.techelevator.caught.SelectionException;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class TextBasedVendingMachine implements VendingMachine {
@@ -15,6 +17,8 @@ public class TextBasedVendingMachine implements VendingMachine {
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private double customerBalance = 0.00;
     private MachineAudit addToLog = new MachineAudit();
+    private Map<String, Integer> salesReportMap = new HashMap<>(); //for keeping track of items sold for the sales report
+    SalesReport salesReport = new SalesReport(); //new SalesReport object
 
 
     @Override
@@ -50,8 +54,7 @@ public class TextBasedVendingMachine implements VendingMachine {
 
             } else if (productSelection.equals("4")) {
                 System.out.println("You've chosen the hidden sales report");
-                SalesReport salesReport = new SalesReport(); //new SalesReport object
-                salesReport.generateReport(); //go to the generateReport method in the Sales Report class
+                salesReport.readReport();
             } else {
                 throw new SelectionException("Please enter a valid selection");
             }
@@ -102,8 +105,6 @@ public class TextBasedVendingMachine implements VendingMachine {
                 selectProduct();
             } else if (purchaseMenuScannerStringInput.equals("3")) {
                 finishTransaction();
-            } else if (purchaseMenuScannerStringInput.equals("4")) {
-                System.out.println("TODO hidden menu");
             } else {
                 throw new SelectionException("Please select a valid menu option");
             }
@@ -173,7 +174,7 @@ public class TextBasedVendingMachine implements VendingMachine {
                             System.out.println("*** Item dispensed ***");
                             System.out.println(chosen.getName() + " | Price: $" + df.format(chosen.getPrice()) + " | Current balance: $" + df.format(customerBalance));
                             System.out.println(chosen.getSound());
-                            purchaseMenu();//if (customerBalance > chosen.getPrice()) {
+                            //if (customerBalance > chosen.getPrice()) {
                             // System.out.println("Please enter more money for that item");
                             //purchaseMenu();
                             //  }
@@ -183,7 +184,16 @@ public class TextBasedVendingMachine implements VendingMachine {
                             //also write it to the log file
                             addToLog.logValidItemSelected(chosen.getName(), chosen.getCode(), chosen.getPrice(), customerBalance); //updates logFile
 
+                            //also add to the map for the sales report
+
+                            if(salesReportMap.containsKey(chosen.getName())){
+                                salesReportMap.put(chosen.getName(), salesReportMap.get(chosen.getName())+1);
+                            } else {
+                                salesReportMap.put(chosen.getName(), 1);
+                            }
+
                             //after dispensing, return to purchase menu
+                            purchaseMenu();
                         }
                     }
                 }
@@ -204,9 +214,9 @@ public class TextBasedVendingMachine implements VendingMachine {
             @Override
             public void displayEnterBillsMessage () {
                 //asks user to enter coins (need to change to bills)
-                System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) stop entering money");
-                System.out.println("");
                 System.out.println("*** Current balance: $" + df.format(customerBalance) + " ***");
+                System.out.println("");
+                System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) stop entering money");
                 enterBills();
             }
 
@@ -285,7 +295,7 @@ public class TextBasedVendingMachine implements VendingMachine {
                 //The machine's current balance must be updated to $0 remaining.
                 customerBalance = 0;
                 System.out.println("Your current balance is $0");
-
+                salesReport.generateReport(salesReportMap); //go to the generateReport method in the Sales Report class
                 //After completing their purchase, the user is returned to the "Main" menu to continue using the vending machine.
                 mainMenu();
             }
@@ -297,5 +307,9 @@ public class TextBasedVendingMachine implements VendingMachine {
 
             public void setCustomerBalance ( double customerBalance){
                 this.customerBalance = customerBalance;
+            }
+
+            public Map<String, Integer> getSalesReportMap() {
+                    return salesReportMap;
             }
         }
