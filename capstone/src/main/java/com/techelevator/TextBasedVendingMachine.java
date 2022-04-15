@@ -6,7 +6,9 @@ import com.techelevator.caught.OutOfStockException;
 import com.techelevator.caught.SelectionException;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class TextBasedVendingMachine implements VendingMachine {
@@ -15,7 +17,9 @@ public class TextBasedVendingMachine implements VendingMachine {
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private double customerBalance = 0.00;
     private MachineAudit addToLog = new MachineAudit();
-    List<VendingItem> listOfItems = inventory.getVendingItems();
+    private Map<String, Integer> salesReportMap = new HashMap<>(); //for keeping track of items sold for the sales report
+    SalesReport salesReport = new SalesReport(); //new SalesReport object
+
 
 
     //this method displays the main menu and asks them to make a choice 1-3 or hidden menu
@@ -50,8 +54,7 @@ public class TextBasedVendingMachine implements VendingMachine {
 
             } else if (productSelection.equals("4")) {
                 System.out.println("You've chosen the hidden sales report");
-                SalesReport salesReport = new SalesReport(); //new SalesReport object
-                salesReport.generateReport(); //go to the generateReport method in the Sales Report class
+                salesReport.readReport(); //go to the generateReport method in the Sales Report class
             } else {
                 throw new SelectionException("Please enter a valid selection");
             }
@@ -66,6 +69,7 @@ public class TextBasedVendingMachine implements VendingMachine {
     @Override
     public void displayProducts() {
         System.out.println("Products available");
+        List<VendingItem> listOfItems = inventory.getVendingItems();
         for (int i = 0; i < listOfItems.size(); i++) {
             System.out.print(listOfItems.get(i).getCode() + " | ");
             System.out.print(listOfItems.get(i).getName() + " | ");
@@ -101,8 +105,6 @@ public class TextBasedVendingMachine implements VendingMachine {
                 selectProduct();
             } else if (purchaseMenuScannerStringInput.equals("3")) {
                 finishTransaction();
-            } else if (purchaseMenuScannerStringInput.equals("4")) {
-                System.out.println("TODO hidden menu");
             } else {
                 throw new SelectionException("Please select a valid menu option");
             }
@@ -129,6 +131,7 @@ public class TextBasedVendingMachine implements VendingMachine {
             try {
                 //generate scanner to receive product selection
                 displayProducts();
+                List<VendingItem> listOfItems = inventory.getVendingItems();
                 Scanner pickProductScanner = new Scanner(System.in);
                 System.out.println("");
                 System.out.println("Enter the code for the item you'd like");
@@ -180,13 +183,19 @@ public class TextBasedVendingMachine implements VendingMachine {
                             System.out.println(chosen.getName() + " | Price: $" + df.format(chosen.getPrice()) + " | Current balance: $" + df.format(customerBalance));
                             System.out.println(chosen.getSound());
 
-                            //after dispensing return to purchase menu
-                            purchaseMenu();
-
-
                             //also write it to the log file
                             addToLog.logValidItemSelected(chosen.getName(), chosen.getCode(), chosen.getPrice(), customerBalance); //updates logFile
 
+                            //also add to the map for the sales report
+
+                            if(salesReportMap.containsKey(chosen.getName())){
+                                salesReportMap.put(chosen.getName(), salesReportMap.get(chosen.getName())+1);
+                            } else {
+                                salesReportMap.put(chosen.getName(), 1);
+                            }
+
+                            //after dispensing, return to purchase menu
+                            purchaseMenu();
 
                         }
                     }
@@ -292,6 +301,9 @@ public class TextBasedVendingMachine implements VendingMachine {
                 //The machine's current balance must be updated to $0 remaining.
                 customerBalance = 0;
                 System.out.println("Your current balance is $0");
+
+                //go to the generateReport method in the Sales Report class
+                salesReport.generateReport(salesReportMap);
 
                 //After completing their purchase, the user is returned to the "Main" menu to continue using the vending machine.
                 mainMenu();
