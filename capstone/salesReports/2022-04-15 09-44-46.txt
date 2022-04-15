@@ -1,0 +1,17 @@
+com.techelevator.vmItems.Candy@7106e68e | 0
+com.techelevator.vmItems.Drink@6576fe71 | 0
+com.techelevator.vmItems.Drink@1f17ae12 | 0
+com.techelevator.vmItems.Gum@6193b845 | 0
+com.techelevator.vmItems.Gum@4d405ef7 | 0
+com.techelevator.vmItems.Chips@6e2c634b | 0
+com.techelevator.vmItems.Chips@37a71e93 | 0
+Wonka Bar | 1
+com.techelevator.vmItems.Drink@76fb509a | 0
+com.techelevator.vmItems.Candy@7c3df479 | 0
+com.techelevator.vmItems.Candy@7e6cbb7a | 0
+com.techelevator.vmItems.Chips@49097b5d | 0
+com.techelevator.vmItems.Gum@c4437c4 | 0
+com.techelevator.vmItems.Candy@7eda2dbb | 0
+com.techelevator.vmItems.Chips@378fd1ac | 0
+com.techelevator.vmItems.Gum@2e817b38 | 0
+com.techelevator.vmItems.Drink@300ffa5d | 0

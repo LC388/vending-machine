@@ -12,8 +12,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.*;
 
 
 public class SalesReport {
@@ -24,6 +26,12 @@ public class SalesReport {
 
     File reportFile = new File("salesReports/" + dateFormat.format(date) + ".txt");
 
+    //bring in the inventory object and the vendingItems list
+    // to merge with the sales report map in generateReport()
+    private Inventory inventory = new Inventory();
+    List<VendingItem> listOfItems = inventory.getVendingItems();
+
+
     public SalesReport() {
 
     }
@@ -32,12 +40,34 @@ public class SalesReport {
     //report generator
     public void generateReport(Map<String, Integer> salesReportMap) {
 
-        try (PrintWriter salesReport = new PrintWriter(new FileOutputStream(reportFile, true))){
-            //iterate through the map and get all of the values
 
+        try (PrintWriter salesReport = new PrintWriter(new FileOutputStream(reportFile, true))){
+
+            //get products from listOfItems that aren't already in the map (because they weren't purchased)
+            //and put them in the map
+            for(int listIndex = 0; listIndex<listOfItems.size(); listIndex++){
+
+                //put the current item in the list into the salesReportMap
+                String currentItemInList = listOfItems.get(listIndex).getName();
+
+                //if the currentItemInList isn't already in the map, put it in there
+                if(!salesReportMap.containsKey(currentItemInList)){
+                    salesReportMap.put(currentItemInList, 0);
+                }
+            }
+
+            //print the salesReportMap
             for(Map.Entry<String, Integer> i : salesReportMap.entrySet()){
                 salesReport.println(i.getKey() + " | " + i.getValue());
             }
+
+
+
+
+
+
+
+
 
 
 
