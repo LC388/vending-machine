@@ -7,7 +7,6 @@ import java.text.DecimalFormat;
 public class Calculator {
     double customerBalance;
     double feedMoneyValue;
-    String billsEnteredInput;
 
     // constructor
     public Calculator(){
@@ -17,10 +16,13 @@ public class Calculator {
     //computes the customer balance after user inputs bills
     public double figureCustomerBalanceAfterBillInput(String billsEnteredInput) throws SelectionException {
         if (billsEnteredInput.equalsIgnoreCase("a")) {
+            this.customerBalance = customerBalance;
             return customerBalance += 1.0;
         } else if (billsEnteredInput.equalsIgnoreCase("b")) {
+            this.customerBalance = customerBalance;
             return customerBalance += 5.0;
         } else if (billsEnteredInput.equalsIgnoreCase("c")) {
+            this.customerBalance = customerBalance;
             return customerBalance += 10.0;
         } else {
             throw new SelectionException("Please select a valid amount");
@@ -29,10 +31,13 @@ public class Calculator {
 
     public double figureFeedMoneyValueFromEnterBillsInput(String billsEnteredInput) throws SelectionException{
         if (billsEnteredInput.equalsIgnoreCase("a")) {
+            this.feedMoneyValue = feedMoneyValue;
             return feedMoneyValue = 1.00;
         } else if (billsEnteredInput.equalsIgnoreCase("b")) {
+            this.feedMoneyValue = feedMoneyValue;
             return feedMoneyValue = 5.00;
         } else if (billsEnteredInput.equalsIgnoreCase("c")) {
+            this.feedMoneyValue = feedMoneyValue;
             return feedMoneyValue = 10.00; //updates logFile
         }
         return feedMoneyValue;
@@ -40,7 +45,8 @@ public class Calculator {
     }
 
     public double figureCustomerBalanceMinusChosenPrice(double chosenPrice){
-        return customerBalance - chosenPrice;
+        this.customerBalance = customerBalance - chosenPrice;
+        return customerBalance;
     }
 
     //calculates the amount of changed needed in coins
@@ -69,7 +75,4 @@ public class Calculator {
         return feedMoneyValue;
     }
 
-    public void setFeedMoneyValue(double feedMoneyValue) {
-        this.feedMoneyValue = feedMoneyValue;
-    }
 }
