@@ -1,46 +1,38 @@
 package com.techelevator;
 
+import com.techelevator.caught.SelectionException;
 import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
 
 public class TextBasedVendingMachineTest extends TestCase {
 
+
+    @Test
     public void testMainMenu() {
-        //lauren
+        //test for selectionException
+
     }
 
-    public void testDisplayProducts() {
-        //shana
-    }
 
     public void testPurchaseMenu() {
-        //lauren
+        //test for SelectionException
+
     }
 
     public void testSelectProduct() {
-        //shana
-    }
+        //test if exceptions are thrown for invalid input
+        //check for itemNotFoundException, outOfStockException, insufficientFundsException
+        //does getSound() work?
 
-    public void testDisplayEnterBillsMessage() {
-        //lauren
-    }
-
-    public void testEnterBills() {
-        //shana
-    }
-
-    public void testDisplayChangeMessage() {
-        //lauren
     }
 
     public void testFinishTransaction() {
-        //shana
+        //test that customerBalance = 0
+
     }
 
-    public void testGetCustomerBalance() {
-        //lauren
-    }
 
-    public void testSetCustomerBalance() {
-        //shana
-    }
 }

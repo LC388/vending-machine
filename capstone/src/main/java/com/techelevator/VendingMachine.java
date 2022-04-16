@@ -26,6 +26,15 @@ public interface VendingMachine {
     //message display to enter money
     void displayEnterBillsMessage();
 
+    //updates the log file when money is fed into machine
+    void updateLogFileWithFeedMoneyValue() throws SelectionException;
+
+    //updates the log file when a valid item is selected
+    void updateLogFileWithValidItemSelected(String name, String code, double price, double customerBalance);
+
+    //updates the log file when change is given
+    void updateLogFileWithChangeGiven();
+
     //receives the bills entered by the user
     //updates balance
     void enterBills();
@@ -39,5 +48,7 @@ public interface VendingMachine {
     //updates customerBalance to 0
     //returns user to main menu
     public void finishTransaction();
+
+
 
 }

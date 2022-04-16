@@ -19,6 +19,8 @@ public class TextBasedVendingMachine implements VendingMachine {
     private MachineAudit addToLog = new MachineAudit();
     private Map<String, Integer> salesReportMap = new HashMap<>(); //for keeping track of items sold for the sales report
     SalesReport salesReport = new SalesReport(); //new SalesReport object
+    Calculator calculator = new Calculator();
+
 
 
 
@@ -90,7 +92,7 @@ public class TextBasedVendingMachine implements VendingMachine {
             System.out.println("2) Select a product");
             System.out.println("3) Finish Transaction");
             System.out.println("");
-            System.out.println("** Your current balance is: $" + df.format(customerBalance) + " **");
+            System.out.println("** Your current balance is: $" + df.format(calculator.getCustomerBalance()) + " **");
             System.out.println("");
             System.out.println("Please enter your selection: ");
 
@@ -164,8 +166,8 @@ public class TextBasedVendingMachine implements VendingMachine {
                         if customer has the funds, remove price of item from their current balance
                         or insufficientFunds exception is thrown prompting user to enter more money
                          */
-                        if (customerBalance > chosen.getPrice()) {
-                            setCustomerBalance(customerBalance - chosen.getPrice());
+                        if (calculator.getCustomerBalance() > chosen.getPrice()) {
+                            calculator.figureCustomerBalanceMinusChosenPrice(chosen.getPrice());
                         } else {
                             throw new InsuffecientFundsException("Please insert more money to complete transaction");
                         }
@@ -180,14 +182,13 @@ public class TextBasedVendingMachine implements VendingMachine {
                             //we found a valid product dispense it to customer and print item name, cost, and money remaining
                             System.out.println("");
                             System.out.println("*** Item dispensed ***");
-                            System.out.println(chosen.getName() + " | Price: $" + df.format(chosen.getPrice()) + " | Current balance: $" + df.format(customerBalance));
+                            System.out.println(chosen.getName() + " | Price: $" + df.format(chosen.getPrice()) + " | Current balance: $" + df.format(calculator.getCustomerBalance()));
                             System.out.println(chosen.getSound());
 
                             //also write it to the log file
-                            addToLog.logValidItemSelected(chosen.getName(), chosen.getCode(), chosen.getPrice(), customerBalance); //updates logFile
+                            updateLogFileWithValidItemSelected(chosen.getName(), chosen.getCode(), chosen.getPrice(), calculator.getCustomerBalance());
 
                             //also add to the map for the sales report
-
                             if(salesReportMap.containsKey(chosen.getName())){
                                 salesReportMap.put(chosen.getName(), salesReportMap.get(chosen.getName())+1);
                             } else {
@@ -218,14 +219,33 @@ public class TextBasedVendingMachine implements VendingMachine {
         }while (doWeNeedToTryAgain) ;
     }
 
-    //asks user to enter coins (need to change to bills)
+    //asks user to enter bills
     @Override
     public void displayEnterBillsMessage () {
         System.out.println("Please enter amount: (a) $1; (b) $5; (c) $10; (d) stop entering money");
         System.out.println("");
-        System.out.println("*** Current balance: $" + df.format(customerBalance) + " ***");
+        System.out.println("*** Current balance: $" + df.format(calculator.getCustomerBalance()) + " ***");
         enterBills();
     }
+
+    @Override
+    public void updateLogFileWithFeedMoneyValue() throws SelectionException{
+        addToLog.logFeedMoney(calculator.getFeedMoneyValue(), calculator.getCustomerBalance()); //updates logFile
+        displayEnterBillsMessage();
+    }
+
+    @Override
+    public void updateLogFileWithValidItemSelected(String name, String code, double price, double customerBalance){
+        addToLog.logValidItemSelected(name, code, price, customerBalance);
+
+    }
+
+    @Override
+    public void updateLogFileWithChangeGiven(){
+        addToLog.logChangeGiven(calculator.getCustomerBalance());
+    }
+
+
 
     @Override
     public void enterBills () {
@@ -236,32 +256,29 @@ public class TextBasedVendingMachine implements VendingMachine {
             Scanner billsEnteredScanner = new Scanner(System.in);
             String billsEnteredInput = billsEnteredScanner.nextLine();
 
-            //keep track of balance, display to customer
-            if (billsEnteredInput.equalsIgnoreCase("a")) {
-                customerBalance += 1.0;
-                feedMoneyValue = 1.00; //updates logFile
-                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-                displayEnterBillsMessage();
-            } else if (billsEnteredInput.equalsIgnoreCase("b")) {
-                customerBalance += 5.0;
-                feedMoneyValue = 5.00; //updates logFile
-                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-                displayEnterBillsMessage();
-            } else if (billsEnteredInput.equalsIgnoreCase("c")) {
-                customerBalance += 10.0;
-                feedMoneyValue = 10.00; //updates logFile
-                addToLog.logFeedMoney(feedMoneyValue, customerBalance); //updates logFile
-                displayEnterBillsMessage();
-            } else if (billsEnteredInput.equalsIgnoreCase("d")) {
+
+            //if it's d, exit
+            if(billsEnteredInput.equalsIgnoreCase("d")){
                 purchaseMenu();
-            } else {
-                throw new SelectionException("Please select a valid amount");
             }
+
+            //call methods from the calculator class that figure out customerBalance and feedMoneyBalance
+            calculator.figureCustomerBalanceAfterBillInput(billsEnteredInput);
+            calculator.figureFeedMoneyValueFromEnterBillsInput(billsEnteredInput);
+
+            //call method to update the log file
+            updateLogFileWithFeedMoneyValue();
+
+            //call method to start over
+            displayEnterBillsMessage();
+
                 } catch (SelectionException e){
                     System.err.println(e.getMessage());
                     displayEnterBillsMessage();
                     enterBills();
                 }
+
+
             }
 
 
@@ -269,20 +286,15 @@ public class TextBasedVendingMachine implements VendingMachine {
             @Override
             public void displayChangeMessage () {
                 //write it to the log file
-                addToLog.logChangeGiven(customerBalance); //updates logFile
+                updateLogFileWithChangeGiven(); //updates logFile
 
-                //calculates total coins needed for change
-                int cents = (int) (customerBalance * 100);
-                int numQuarters = cents / 25;
-                int numDimes = (cents % 25) / 10;
-                int numNickels = ((cents % 25) % 10) / 5;
-                int numPennies = ((cents % 25) % 10) % 5;
+                //calculates total coins needed for change, returns an array
+                calculator.calculateChangeNeeded();
+                System.out.println("Quarters: " + calculator.calculateChangeNeeded()[0]);
+                System.out.println("Dimes: " + calculator.calculateChangeNeeded()[1]);
+                System.out.println("Nickles: " + calculator.calculateChangeNeeded()[2]);
+                System.out.println("Pannies: " + calculator.calculateChangeNeeded()[3]);
 
-                //displays total change to user
-                System.out.println(numQuarters + " Quarters");
-                System.out.println(numDimes + " Dimes");
-                System.out.println(numNickels + " Nickels");
-                System.out.println(numPennies + " Pennies");
 
             }
 
@@ -295,26 +307,20 @@ public class TextBasedVendingMachine implements VendingMachine {
             public void finishTransaction () {
                 System.out.println("");
                 System.out.println("** Thanks for your purchase **");
-                System.out.println("******* Your change is *******");
+                System.out.println("Balance in Machine: $" + calculator.getCustomerBalance());
+                System.out.println("Your change is:");
                 displayChangeMessage();
 
                 //The machine's current balance must be updated to $0 remaining.
-                customerBalance = 0;
+                calculator.setCustomerBalance(0);
                 System.out.println("Your current balance is $0");
 
-                //go to the generateReport method in the Sales Report class
+                //call the generateReport method in the Sales Report class
                 salesReport.generateReport(salesReportMap);
 
                 //After completing their purchase, the user is returned to the "Main" menu to continue using the vending machine.
                 mainMenu();
             }
 
-            //getters and setters
-            public double getCustomerBalance () {
-                return customerBalance;
-            }
 
-            public void setCustomerBalance ( double customerBalance){
-                this.customerBalance = customerBalance;
-            }
         }

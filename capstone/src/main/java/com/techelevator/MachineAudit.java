@@ -13,6 +13,7 @@ public class MachineAudit {
     double feedMoneyValue;
     private static final DecimalFormat df = new DecimalFormat("0.00");
     File logFile = new File("logFile.txt");
+    Calculator calculator = new Calculator();
 
     //format the date and time
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a");
