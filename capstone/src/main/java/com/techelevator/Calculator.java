@@ -39,14 +39,16 @@ public class Calculator {
         } else if (billsEnteredInput.equalsIgnoreCase("c")) {
             this.feedMoneyValue = feedMoneyValue;
             return feedMoneyValue = 10.00; //updates logFile
+        } else {
+            throw new SelectionException("Please enter a valid amount");
         }
-        return feedMoneyValue;
 
     }
 
-    public double figureCustomerBalanceMinusChosenPrice(double chosenPrice){
-        this.customerBalance = customerBalance - chosenPrice;
-        return customerBalance;
+    public double figureCustomerBalanceMinusChosenPrice(double customerBalance, double chosenPrice){
+        double newBalance = customerBalance - chosenPrice;
+        this.customerBalance = newBalance;
+        return newBalance;
     }
 
     //calculates the amount of changed needed in coins

@@ -167,7 +167,7 @@ public class TextBasedVendingMachine implements VendingMachine {
                         or insufficientFunds exception is thrown prompting user to enter more money
                          */
                         if (calculator.getCustomerBalance() > chosen.getPrice()) {
-                            calculator.figureCustomerBalanceMinusChosenPrice(chosen.getPrice());
+                            calculator.figureCustomerBalanceMinusChosenPrice(calculator.getCustomerBalance(), chosen.getPrice());
                         } else {
                             throw new InsuffecientFundsException("Please insert more money to complete transaction");
                         }
