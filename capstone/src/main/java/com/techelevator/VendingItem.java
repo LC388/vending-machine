@@ -36,8 +36,8 @@ public abstract class VendingItem {
         this.quantity = quantity;
     }
 
-    public void subtractQuantity(int change){
-        quantity-= change;
+    public int subtractQuantity(int change){
+        return quantity-= change;
     }
 
 

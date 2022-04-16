@@ -2,17 +2,16 @@ package com.techelevator;
 
 import com.techelevator.caught.SelectionException;
 import junit.framework.TestCase;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
 
 public class TextBasedVendingMachineTest extends TestCase {
 
 
     @Test
-    public void testMainMenu() {
-        //test for selectionException
+    public void testMainMenuSelection() throws SelectionException {
+
+        TextBasedVendingMachine testMachine = new TextBasedVendingMachine();
 
     }
 
@@ -31,7 +30,7 @@ public class TextBasedVendingMachineTest extends TestCase {
 
     public void testFinishTransaction() {
         //test that customerBalance = 0
-
+        //we tested this in the calculator test class
     }
 
 

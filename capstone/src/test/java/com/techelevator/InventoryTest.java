@@ -2,12 +2,12 @@ package com.techelevator;
 
 import com.techelevator.vmItems.Candy;
 import com.techelevator.vmItems.Chips;
+import com.techelevator.vmItems.Drink;
+import com.techelevator.vmItems.Gum;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.Assert.*;
 import java.io.File;
@@ -24,6 +24,9 @@ public class InventoryTest {
     public void createInventoryToTest(){
         vendingItems.add(new Chips("A1", "Potato Crisps", 3.05, "Chip", 5));
         vendingItems.add(new Candy("B1", "Moonpie", 1.80, "Candy", 5));
+        vendingItems.add(new Drink("C1", "Cola", 1.25, "Drink", 5));
+        vendingItems.add(new Gum("D1", "U-Chews", .85, "Gum", 5));
+
     }
 
     @Test
@@ -38,10 +41,19 @@ public class InventoryTest {
     public void doesEachItemHaveNameAndPrice(){
         Assert.assertEquals("Potato Crisps", vendingItems.get(0).getName());
         Assert.assertEquals(3.05, vendingItems.get(0).getPrice(), 0);
+        Assert.assertEquals(5, vendingItems.get(0).getQuantity(), 0);
+
         Assert.assertEquals("Moonpie", vendingItems.get(1).getName());
         Assert.assertEquals(1.80, vendingItems.get(1).getPrice(), 0);
-        Assert.assertEquals(5, vendingItems.get(0).getQuantity(), 0);
         Assert.assertEquals(5, vendingItems.get(1).getQuantity(), 0);
+
+        Assert.assertEquals("Cola", vendingItems.get(2).getName());
+        Assert.assertEquals(1.25, vendingItems.get(2).getPrice(), 0);
+        Assert.assertEquals(5, vendingItems.get(2).getQuantity(), 0);
+
+        Assert.assertEquals("U-Chews", vendingItems.get(3).getName());
+        Assert.assertEquals(.85, vendingItems.get(3).getPrice(), 0);
+        Assert.assertEquals(5, vendingItems.get(3).getQuantity(), 0);
     }
 
 
@@ -55,7 +67,19 @@ public class InventoryTest {
         assertTrue(testFile.exists());
     }
 
+    @Test
+    //testing subtractQuantity method from the VendingItem abstract class
+    public void testSubtractQuantity(){
+        Assert.assertEquals(4, vendingItems.get(0).subtractQuantity(1));
+    }
 
+    @Test
+    public void testGetSound() {
+        Assert.assertEquals("Crunch Crunch, Yum!", vendingItems.get(0).getSound());
+        Assert.assertEquals("Munch Munch, Yum!", vendingItems.get(1).getSound());
+        Assert.assertEquals("Glug Glug, Yum!", vendingItems.get(2).getSound());
+        Assert.assertEquals("Chew Chew, Yum!", vendingItems.get(3).getSound());
+    }
 
 
 }

@@ -1,5 +1,6 @@
 package com.techelevator;
 import com.techelevator.TextBasedVendingMachine;
+import com.techelevator.caught.SelectionException;
 
 //Provide a "Hidden" menu option on the main menu ("4") that writes to a sales report that shows the total sales
 // since the machine was started. The name of the file must include the date and time so each sales report is uniquely named.
@@ -61,16 +62,6 @@ public class SalesReport {
                 salesReport.println(i.getKey() + " | " + i.getValue());
             }
 
-
-
-
-
-
-
-
-
-
-
         } catch (FileNotFoundException e){
             System.err.println("Cannot open logFile for writing");
         }
@@ -78,7 +69,7 @@ public class SalesReport {
     }
 
     //report reader
-    public void readReport(){
+    public void readReport() throws SelectionException {
 
         File folder = new File("salesReports/"); //path to the folder
         String[] filesPresent = folder.list(); //makes an array of the files in that folder
@@ -91,9 +82,7 @@ public class SalesReport {
             for(String fileName : filesPresent){  // loop through files in the directory
 
                 File fileToRead = new File("salesReports/" + fileName);
-                Scanner fileReader;
-                try{
-                    fileReader = new Scanner(fileToRead);
+                try(Scanner fileReader = new Scanner(fileToRead)){
                     System.out.println("\n" + fileName); //print name of the file
 
                     while(fileReader.hasNextLine()){
@@ -110,7 +99,7 @@ public class SalesReport {
 
     }
 
-    public void salesReportNavigation(){
+    public void salesReportNavigation() throws SelectionException {
         //navigation
         TextBasedVendingMachine vendingMachine = new TextBasedVendingMachine();
 
@@ -120,13 +109,18 @@ public class SalesReport {
         Scanner navigationInput = new Scanner(System.in);
         String navigationSelection = navigationInput.nextLine();
 
-        if(navigationSelection.equals("1")){
-            vendingMachine.mainMenu();
-        } else if(navigationSelection.equals("2")){
-            System.out.println("*** Thank you for using the Vending Machine ***");
-            System.exit(0);
-        } else {
-            System.out.println("Please enter 1 or 2");
+        try {
+
+            if (navigationSelection.equals("1")) {
+                vendingMachine.mainMenu();
+            } else if (navigationSelection.equals("2")) {
+                System.out.println("*** Thank you for using the Vending Machine ***");
+                System.exit(0);
+            } else {
+                throw new SelectionException("Please enter 1 or 2");
+            }
+        } catch (SelectionException e){
+            System.err.println(e.getMessage());
             salesReportNavigation();
         }
 

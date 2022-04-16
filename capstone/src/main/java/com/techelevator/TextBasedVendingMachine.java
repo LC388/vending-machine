@@ -27,8 +27,6 @@ public class TextBasedVendingMachine implements VendingMachine {
     //this method displays the main menu and asks them to make a choice 1-3 or hidden menu
     @Override
     public void mainMenu() {
-
-        try {
             // create scanner and ask customer to choose products
             Scanner selectProductScanner = new Scanner(System.in);
             System.out.println("");
@@ -38,32 +36,38 @@ public class TextBasedVendingMachine implements VendingMachine {
             System.out.println("3) Exit");
             System.out.println("Please enter a number: ");
             String productSelection = selectProductScanner.nextLine();
+            mainMenuSelection(productSelection);
+    }
 
-            //if 1, display products from TextBasedVendingMachine class
-            //if 2, go to purchase menu
-            //if 3, end program
-            //if 4, hidden menu
-            if (productSelection.equals("1")) {
-                displayProducts();  //invokes the displayProducts method below
-                mainMenu(); //go back to this method
-            } else if (productSelection.equals("2")) {
-                purchaseMenu();
+    @Override
+    public void mainMenuSelection(String productSelection){
+    try {
+        //if 1, display products from TextBasedVendingMachine class
+        //if 2, go to purchase menu
+        //if 3, end program
+        //if 4, hidden menu
+        if (productSelection.equals("1")) {
+            displayProducts();  //invokes the displayProducts method below
+            mainMenu(); //go back to this method
+        } else if (productSelection.equals("2")) {
+            purchaseMenu();
 
-            } else if (productSelection.equals("3")) {
-                System.out.println("");
-                System.out.println("*** Thank you for using the Vending Machine ***");
-                System.exit(0); //normal termination of jvm
+        } else if (productSelection.equals("3")) {
+            System.out.println("");
+            System.out.println("*** Thank you for using the Vending Machine ***");
+            System.exit(0); //normal termination of jvm
 
-            } else if (productSelection.equals("4")) {
-                System.out.println("You've chosen the hidden sales report");
-                salesReport.readReport(); //go to the generateReport method in the Sales Report class
-            } else {
-                throw new SelectionException("Please enter a valid selection");
-            }
-        } catch (SelectionException e) {
-            System.err.println(e.getMessage());
-            mainMenu();
+        } else if (productSelection.equals("4")) {
+            System.out.println("You've chosen the hidden sales report");
+            salesReport.readReport(); //go to the generateReport method in the Sales Report class
+        } else {
+            throw new SelectionException("Please enter a valid selection");
         }
+    } catch (SelectionException e) {
+        System.err.println(e.getMessage());
+        mainMenu();
+    }
+
     }
 
 

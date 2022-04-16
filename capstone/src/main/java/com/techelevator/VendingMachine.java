@@ -7,6 +7,9 @@ public interface VendingMachine {
     //displays the main menu and asks them to make a choice 1-3 or hidden menu
     void mainMenu() throws SelectionException;
 
+    //choices for main menu
+    void mainMenuSelection(String productSelection);
+
     //gets the items from the Inventory class, which pulls the data from
     // the csv file and lists them
     void displayProducts();

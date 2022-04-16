@@ -70,7 +70,4 @@ public class Inventory {
         return vendingItems;
     }
 
-    public void setVendingItems(List<VendingItem> vendingItems) {
-        this.vendingItems = vendingItems;
-    }
 }
