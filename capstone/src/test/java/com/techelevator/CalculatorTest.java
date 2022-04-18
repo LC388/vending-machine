@@ -3,7 +3,7 @@ package com.techelevator;
 import com.techelevator.caught.SelectionException;
 import junit.framework.TestCase;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
 public class CalculatorTest extends TestCase {

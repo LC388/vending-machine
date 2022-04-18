@@ -27,48 +27,53 @@ public class TextBasedVendingMachine implements VendingMachine {
     //this method displays the main menu and asks them to make a choice 1-3 or hidden menu
     @Override
     public void mainMenu() {
-            // create scanner and ask customer to choose products
-            Scanner selectProductScanner = new Scanner(System.in);
-            System.out.println("");
-            System.out.println("*** Main Menu ***");
-            System.out.println("1) Display vending machine items");
-            System.out.println("2) Make a purchase");
-            System.out.println("3) Exit");
-            System.out.println("Please enter a number: ");
-            String productSelection = selectProductScanner.nextLine();
-            mainMenuSelection(productSelection);
+        // create scanner and ask customer to choose products
+        System.out.println("");
+        System.out.println("*** Main Menu ***");
+        System.out.println("1) Display vending machine items");
+        System.out.println("2) Make a purchase");
+        System.out.println("3) Exit");
+        System.out.println("Please enter a number: ");
+
+        boolean inputInt = false;
+        do {
+            try {
+                Scanner selectProductScanner = new Scanner(System.in);
+                String productSelection = selectProductScanner.nextLine();
+                //if 1, display products from TextBasedVendingMachine class
+                //if 2, go to purchase menu
+                //if 3, end program
+                //if 4, hidden menu
+
+                if (productSelection.equals("1") || productSelection.equals(2) || productSelection.equals("3") || productSelection.equals("4")){
+                    inputInt = true;
+                }
+
+                if (productSelection.equals("1")) {
+                    displayProducts();  //invokes the displayProducts method below
+                    mainMenu(); //go back to this method
+                } else if (productSelection.equals("2")) {
+                    purchaseMenu();
+
+                } else if (productSelection.equals("3")) {
+                    System.out.println("");
+                    System.out.println("*** Thank you for using the Vending Machine ***");
+                    System.exit(0); //normal termination of jvm
+
+                } else if (productSelection.equals("4")) {
+                    System.out.println("You've chosen the hidden sales report");
+                    salesReport.readReport(); //go to the generateReport method in the Sales Report class
+                } else {
+                    throw new SelectionException("Please enter a valid selection");
+                }
+            } catch (SelectionException e) {
+                System.err.println(e.getMessage());
+            }
+            mainMenu();
+        } while (inputInt);
     }
 
-    @Override
-    public void mainMenuSelection(String productSelection){
-    try {
-        //if 1, display products from TextBasedVendingMachine class
-        //if 2, go to purchase menu
-        //if 3, end program
-        //if 4, hidden menu
-        if (productSelection.equals("1")) {
-            displayProducts();  //invokes the displayProducts method below
-            mainMenu(); //go back to this method
-        } else if (productSelection.equals("2")) {
-            purchaseMenu();
 
-        } else if (productSelection.equals("3")) {
-            System.out.println("");
-            System.out.println("*** Thank you for using the Vending Machine ***");
-            System.exit(0); //normal termination of jvm
-
-        } else if (productSelection.equals("4")) {
-            System.out.println("You've chosen the hidden sales report");
-            salesReport.readReport(); //go to the generateReport method in the Sales Report class
-        } else {
-            throw new SelectionException("Please enter a valid selection");
-        }
-    } catch (SelectionException e) {
-        System.err.println(e.getMessage());
-        mainMenu();
-    }
-
-    }
 
 
     //displays welcome message and choices
@@ -89,36 +94,41 @@ public class TextBasedVendingMachine implements VendingMachine {
     //displays the purchase menu (feed money, select product, finish transaction, current money)
     @Override
     public void purchaseMenu() {
-        try {
-            System.out.println("");
-            System.out.println("*** Purchase Menu ***");
-            System.out.println("1) Feed Money into machine");
-            System.out.println("2) Select a product");
-            System.out.println("3) Finish Transaction");
-            System.out.println("");
-            System.out.println("** Your current balance is: $" + df.format(calculator.getCustomerBalance()) + " **");
-            System.out.println("");
-            System.out.println("Please enter your selection: ");
 
-            //collect user input, assign to String variable
-            Scanner purchaseMenuScanner = new Scanner(System.in);
-            String purchaseMenuScannerStringInput = purchaseMenuScanner.nextLine();
+        Boolean inputIsInteger = false;
+        do {
+            try {
+                System.out.println("");
+                System.out.println("*** Purchase Menu ***");
+                System.out.println("1) Feed Money into machine");
+                System.out.println("2) Select a product");
+                System.out.println("3) Finish Transaction");
+                System.out.println("");
+                System.out.println("** Your current balance is: $" + df.format(calculator.getCustomerBalance()) + " **");
+                System.out.println("");
+                System.out.println("Please enter your selection: ");
 
-            //Purchase menu choices
-            if (purchaseMenuScannerStringInput.equals("1")) {
-                displayEnterBillsMessage();
-            } else if (purchaseMenuScannerStringInput.equals("2")) {
-                selectProduct();
-            } else if (purchaseMenuScannerStringInput.equals("3")) {
-                finishTransaction();
-            } else {
-                throw new SelectionException("Please select a valid menu option");
+                //collect user input, assign to String variable
+                Scanner purchaseMenuScanner = new Scanner(System.in);
+                String purchaseMenuScannerStringInput = purchaseMenuScanner.nextLine();
+            if (purchaseMenuScanner.equals("1") || purchaseMenuScanner.equals(2) || purchaseMenuScanner.equals("3")){
+                inputIsInteger = true;
             }
-
-        } catch (SelectionException e) {
-            System.err.println(e.getMessage());
-            purchaseMenu();
-        }
+                //Purchase menu choices
+                if (purchaseMenuScannerStringInput.equals("1")) {
+                    displayEnterBillsMessage();
+                } else if (purchaseMenuScannerStringInput.equals("2")) {
+                    selectProduct();
+                } else if (purchaseMenuScannerStringInput.equals("3")) {
+                    finishTransaction();
+                } else {
+                    throw new SelectionException("Please select a valid menu option");
+                }
+            } catch (SelectionException e) {
+                System.err.println(e.getMessage());
+                purchaseMenu();
+            }
+        }while (inputIsInteger);
     }
 
 

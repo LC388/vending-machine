@@ -5,8 +5,8 @@ import com.techelevator.vmItems.Chips;
 import com.techelevator.vmItems.Drink;
 import com.techelevator.vmItems.Gum;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
 import static org.junit.Assert.*;
@@ -20,7 +20,7 @@ public class InventoryTest {
     Inventory inventory = new Inventory();
     List<VendingItem> vendingItems = new ArrayList<>();
 
-    @Before
+    @BeforeEach
     public void createInventoryToTest(){
         vendingItems.add(new Chips("A1", "Potato Crisps", 3.05, "Chip", 5));
         vendingItems.add(new Candy("B1", "Moonpie", 1.80, "Candy", 5));

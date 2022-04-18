@@ -2,17 +2,51 @@ package com.techelevator;
 
 import com.techelevator.caught.SelectionException;
 import junit.framework.TestCase;
-import org.junit.Test;
+import org.junit.Assert;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+
+
+import java.io.*;
 
 
 public class TextBasedVendingMachineTest extends TestCase {
 
+    TextBasedVendingMachine testMachine = new TextBasedVendingMachine();
 
-    @Test
-    public void testMainMenuSelection() throws SelectionException {
+    public void testMainMenu(){
+        try{
+           String productSelection = "r";
 
-        TextBasedVendingMachine testMachine = new TextBasedVendingMachine();
+            // IMPORTANT: Save the old System.out!
+            PrintStream old = System.out;
 
+            // Create a stream to hold the output
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PrintStream ps = new PrintStream(baos);
+            System.setOut(new PrintStream(baos, false, "UTF-8"));
+
+            // IMPORTANT: save old System.in!
+            InputStream input = System.in;
+
+            // Set new System.in
+            System.setIn(new ByteArrayInputStream(productSelection.getBytes()));
+            testMachine.mainMenu();
+
+
+
+            // Put things back
+            System.out.flush();
+            System.setOut(old);
+
+            //Restore
+            System.setIn(input);
+
+
+        }catch(IOException ioe){
+            new IOException("i/o problem - test not executed\n");
+        }
     }
 
 

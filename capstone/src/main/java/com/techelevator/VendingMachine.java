@@ -8,7 +8,6 @@ public interface VendingMachine {
     void mainMenu() throws SelectionException;
 
     //choices for main menu
-    void mainMenuSelection(String productSelection);
 
     //gets the items from the Inventory class, which pulls the data from
     // the csv file and lists them
