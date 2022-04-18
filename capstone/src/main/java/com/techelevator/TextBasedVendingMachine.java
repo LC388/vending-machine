@@ -36,7 +36,7 @@ public class TextBasedVendingMachine implements VendingMachine {
         System.out.println("Please enter a number: ");
 
         boolean inputInt = false;
-        do {
+
             try {
                 Scanner selectProductScanner = new Scanner(System.in);
                 String productSelection = selectProductScanner.nextLine();
@@ -68,9 +68,10 @@ public class TextBasedVendingMachine implements VendingMachine {
                 }
             } catch (SelectionException e) {
                 System.err.println(e.getMessage());
+                mainMenu();
             }
-            mainMenu();
-        } while (inputInt);
+
+
     }
 
 
@@ -307,7 +308,7 @@ public class TextBasedVendingMachine implements VendingMachine {
                 System.out.println("Quarters: " + calculator.calculateChangeNeeded()[0]);
                 System.out.println("Dimes: " + calculator.calculateChangeNeeded()[1]);
                 System.out.println("Nickles: " + calculator.calculateChangeNeeded()[2]);
-                System.out.println("Pannies: " + calculator.calculateChangeNeeded()[3]);
+                System.out.println("Pennies: " + calculator.calculateChangeNeeded()[3]);
 
 
             }
