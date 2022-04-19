@@ -333,7 +333,7 @@ public class TextBasedVendingMachine implements VendingMachine {
             public void finishTransaction () {
                 System.out.println("");
                 System.out.println("** Thanks for your purchase **");
-                System.out.println("Balance in Machine: $" + calculator.getCustomerBalance());
+                System.out.println("Balance in Machine: $" + df.format(calculator.getCustomerBalance()));
                 System.out.println("Your change is:");
                 displayChangeMessage();
 
