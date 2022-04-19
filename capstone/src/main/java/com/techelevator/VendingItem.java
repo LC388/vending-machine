@@ -20,6 +20,9 @@ public abstract class VendingItem {
         this.quantity = quantity;
 
     }
+    public VendingItem(){
+
+    }
 
     //getters and setters
     public String getCode() {

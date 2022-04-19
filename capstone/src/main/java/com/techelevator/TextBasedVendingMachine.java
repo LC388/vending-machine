@@ -116,11 +116,11 @@ public class TextBasedVendingMachine implements VendingMachine {
                 inputIsInteger = true;
             }
                 //Purchase menu choices
-                if (purchaseMenuScannerStringInput.equals("1")) {
+                if (purchaseMenuScannerStringInput.equalsIgnoreCase("1")) {
                     displayEnterBillsMessage();
-                } else if (purchaseMenuScannerStringInput.equals("2")) {
+                } else if (purchaseMenuScannerStringInput.equalsIgnoreCase("2")) {
                     selectProduct();
-                } else if (purchaseMenuScannerStringInput.equals("3")) {
+                } else if (purchaseMenuScannerStringInput.equalsIgnoreCase("3")) {
                     finishTransaction();
                 } else {
                     throw new SelectionException("Please select a valid menu option");
@@ -143,6 +143,13 @@ public class TextBasedVendingMachine implements VendingMachine {
 
         //This variable is used to avoid termination of jvm due to exceptions thrown
         boolean doWeNeedToTryAgain = false;
+        boolean doesItemExist = false;
+        VendingItem chosen = new VendingItem() {
+            @Override
+            public String getSound() {
+                return null;
+            }
+        };
 
         do {
             try {
@@ -156,36 +163,16 @@ public class TextBasedVendingMachine implements VendingMachine {
 
                 //iterate through vending items to check for product code selected
                 for (VendingItem item : listOfItems) {
-                    if (item.getCode().equalsIgnoreCase(productSelection)){
+                    if (item.getCode().equalsIgnoreCase(productSelection)) {
                         //assign item to local object variable
-                        VendingItem chosen = item;
+                        chosen = item;
                         //we've found the item so no need to try again at this point
                         doWeNeedToTryAgain = false;
                         //it exists!
-                        boolean doesItemExist = true;
+                        doesItemExist = true;
+                    }
+                }
 
-                        /*
-                        if selected item is sold out, customer informed, returned to purchase menu
-                        if it's not sold out, subtract 1 from the quantity
-                        subtractQuantity method available via VendingItem class
-                        */
-                        if (chosen.getQuantity() > 0) {
-                            chosen.subtractQuantity(1);
-                        } else {
-                            throw new OutOfStockException("Sorry this item is out of stock, please select a new item.");
-
-                        }
-
-                        /*
-                        check customer balance
-                        if customer has the funds, remove price of item from their current balance
-                        or insufficientFunds exception is thrown prompting user to enter more money
-                         */
-                        if (calculator.getCustomerBalance() > chosen.getPrice()) {
-                            calculator.figureCustomerBalanceMinusChosenPrice(calculator.getCustomerBalance(), chosen.getPrice());
-                        } else {
-                            throw new InsuffecientFundsException("Please insert more money to complete transaction");
-                        }
 
 
                         /*
@@ -193,7 +180,32 @@ public class TextBasedVendingMachine implements VendingMachine {
                          */
                         if(!doesItemExist){
                             throw new ItemNotFoundException("Please input a valid code to receive an item from the vending machine");
-                        }else {
+                        }
+
+                            /*
+                        if selected item is sold out, customer informed, returned to purchase menu
+                        if it's not sold out, subtract 1 from the quantity
+                        subtractQuantity method available via VendingItem class
+                        */
+
+                        if (chosen.getQuantity() > 0) {
+                            chosen.subtractQuantity(1);
+                        } else {
+                            throw new OutOfStockException("Sorry this item is out of stock, please try again.");
+                        }
+
+
+                        /*
+                        check customer balance
+                        if customer has the funds, remove price of item from their current balance
+                        or insufficientFunds exception is thrown prompting user to enter more money
+                         */
+                            if (calculator.getCustomerBalance() > chosen.getPrice()) {
+                                calculator.figureCustomerBalanceMinusChosenPrice(calculator.getCustomerBalance(), chosen.getPrice());
+                            } else {
+                                throw new InsuffecientFundsException("Please insert more money to complete transaction");
+                            }
+
                             //we found a valid product dispense it to customer and print item name, cost, and money remaining
                             System.out.println("");
                             System.out.println("*** Item dispensed ***");
@@ -213,9 +225,9 @@ public class TextBasedVendingMachine implements VendingMachine {
                             //after dispensing, return to purchase menu
                             purchaseMenu();
 
-                        }
-                    }
-                }
+
+
+
             } catch (InsuffecientFundsException e) {
                 //print message and return to purchase menu
                 System.err.println(e.getMessage());
@@ -223,9 +235,8 @@ public class TextBasedVendingMachine implements VendingMachine {
             } catch (OutOfStockException f) {
                 //print messages
                 System.err.println(f.getMessage());
-                System.out.println("Enter the Code for the Item you'd like");
                 //return system to start of selectProduct() method. (current method)
-                doWeNeedToTryAgain = true;
+                purchaseMenu();
             } catch (ItemNotFoundException g) {
                 System.err.println(g.getMessage());
                 //return system to start of selectProduct() method. (current method)
